@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { LedgerProvider } from "@/context/LedgerContext";
+import { LedgerProvider, useLedger } from "@/context/LedgerContext";
 import { Navbar, NavTab } from "@/components/layout/Navbar";
 import { NotebookInput } from "@/components/notebook/NotebookInput";
 import { LiveFeed } from "@/components/notebook/LiveFeed";
@@ -16,6 +16,7 @@ import { ExpenseTable } from "@/components/expenses/ExpenseTable";
 import { AddExpenseModal } from "@/components/expenses/AddExpenseModal";
 import { ReceiptUploadModal } from "@/components/ocr/ReceiptUploadModal";
 import { WhatIfSimulator } from "@/components/simulator/WhatIfSimulator";
+import { OnboardingModal } from "@/components/onboarding/OnboardingModal";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import {
@@ -34,9 +35,23 @@ function LedgerAppContent() {
   const [isAddExpenseOpen, setIsAddExpenseOpen] = useState(false);
   const [isOCROpen, setIsOCROpen] = useState(false);
   const [isWhatIfOpen, setIsWhatIfOpen] = useState(false);
+  
+  const { isOnboarded, isLoading } = useLedger();
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-slate-50">
+        <div className="animate-pulse flex flex-col items-center gap-4">
+          <div className="w-12 h-12 rounded-full border-4 border-[#634E9F] border-t-transparent animate-spin"></div>
+          <p className="text-sm font-bold text-slate-500 uppercase tracking-wider">Loading Ledger...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col min-h-screen">
+      {!isOnboarded && <OnboardingModal />}
       {/* Navigation Header */}
       <Navbar
         activeTab={activeTab}

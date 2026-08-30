@@ -176,32 +176,45 @@ export const ReceiptUploadModal: React.FC<ReceiptUploadModalProps> = ({
         {/* Upload Zone & Manual Text Paste */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {/* File Upload Dropzone */}
-          <label className={`border-2 border-dashed border-gray-200 rounded-2xl p-6 bg-white shadow-sm flex flex-col items-center justify-center gap-2 cursor-pointer hover:bg-[#F6F5FB] transition-colors ${isScanning ? "opacity-60 pointer-events-none" : ""}`}>
+          <div className="border-2 border-dashed border-gray-200 rounded-2xl p-4 bg-white shadow-sm flex flex-col items-center justify-center gap-3">
             {isScanning ? (
-              <>
+              <div className="flex flex-col items-center gap-2 py-4">
                 <Loader2 className="w-8 h-8 text-[#634E9F] animate-spin" />
                 <span className="text-xs font-bold uppercase text-center text-slate-800 mt-2">
                   Scanning with Gemini AI…
                 </span>
                 <span className="text-[10px] font-bold text-slate-400">This may take a few seconds</span>
-              </>
+              </div>
             ) : (
-              <>
-                <Camera className="w-8 h-8 text-[#634E9F]" />
-                <span className="text-xs font-bold uppercase text-center text-slate-800 mt-2">
-                  Upload Memo / Receipt Photo
-                </span>
-                <span className="text-[10px] font-bold text-slate-400">PNG, JPG, or PDF</span>
-              </>
+              <div className="flex flex-row w-full gap-3 h-full">
+                <label className="flex-1 flex flex-col items-center justify-center gap-2 bg-[#F6F5FB] hover:bg-[#EAE5F8] rounded-xl p-4 cursor-pointer transition-colors border border-transparent hover:border-[#634E9F]/30">
+                  <Upload className="w-6 h-6 text-[#634E9F]" />
+                  <span className="text-[10px] font-bold uppercase text-center text-slate-800 mt-1">
+                    Upload File
+                  </span>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={handleFileUpload}
+                  />
+                </label>
+                <label className="flex-1 flex flex-col items-center justify-center gap-2 bg-[#F6F5FB] hover:bg-[#EAE5F8] rounded-xl p-4 cursor-pointer transition-colors border border-transparent hover:border-[#634E9F]/30">
+                  <Camera className="w-6 h-6 text-[#634E9F]" />
+                  <span className="text-[10px] font-bold uppercase text-center text-slate-800 mt-1">
+                    Take Photo
+                  </span>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    capture="environment"
+                    className="hidden"
+                    onChange={handleFileUpload}
+                  />
+                </label>
+              </div>
             )}
-            <input
-              type="file"
-              accept="image/*"
-              className="hidden"
-              disabled={isScanning}
-              onChange={handleFileUpload}
-            />
-          </label>
+          </div>
 
           {/* Paste Memo Text */}
           <div className="bg-white rounded-2xl shadow-sm p-4 border border-gray-50 flex flex-col gap-1.5">

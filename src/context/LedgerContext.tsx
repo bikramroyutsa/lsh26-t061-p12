@@ -30,6 +30,8 @@ interface LedgerContextType {
   whatIfCategory: string;
   whatIfCutPercent: number;
   userId: string | null;
+  isOnboarded: boolean | null;
+  isLoading: boolean;
 
   // Derived calculations
   forecast: ForecastResult;
@@ -60,6 +62,7 @@ interface LedgerContextType {
   setWhatIf: (category: string, cutPercent: number) => void;
   addShorthand: (command: Omit<ShorthandCommand, "id">) => void;
   deleteShorthand: (id: string) => void;
+  updateOnboarding: (salary: number, dpsRate: number) => Promise<void>;
   signOut: () => Promise<void>;
 }
 
@@ -68,6 +71,8 @@ const LedgerContext = createContext<LedgerContextType | undefined>(undefined);
 export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const supabase = createClient();
   const [userId, setUserId] = useState<string | null>(null);
+  const [isOnboarded, setIsOnboarded] = useState<boolean | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   
   const [activeCaseId, setActiveCaseId] = useState<string>("");
   const [salary, setSalary] = useState<number>(0);
@@ -106,6 +111,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         loadCloudData(session.user.id);
       } else {
         setUserId(null);
+        setIsLoading(false);
         if (window.location.pathname !== "/login") {
           window.location.href = "/login";
         }
@@ -116,11 +122,13 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   }, []);
 
   const loadCloudData = async (uid: string) => {
+    setIsLoading(true);
     // Fetch profile
     const { data: profile } = await supabase.from('user_profiles').select('*').eq('id', uid).single();
     if (profile) {
       setSalary(Number(profile.salary_bdt));
       setDPSRate(Number(profile.dps_rate));
+      setIsOnboarded(profile.is_onboarded);
     }
 
     // Fetch expenses
@@ -134,6 +142,8 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     // Fetch shorthands
     const { data: shs } = await supabase.from('shorthands').select('*');
     if (shs) setShorthands(shs as any);
+    
+    setIsLoading(false);
   };
 
   const signOut = async () => {
@@ -223,6 +233,18 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     if (!userId) return;
     setSalary(newSalary);
     await supabase.from('user_profiles').update({ salary_bdt: newSalary }).eq('id', userId);
+  };
+  
+  const updateOnboarding = async (newSalary: number, newDpsRate: number) => {
+    if (!userId) return;
+    setSalary(newSalary);
+    setDPSRate(newDpsRate);
+    setIsOnboarded(true);
+    await supabase.from('user_profiles').update({ 
+      salary_bdt: newSalary, 
+      dps_rate: newDpsRate, 
+      is_onboarded: true 
+    }).eq('id', userId);
   };
 
   const handleAddExpense = async (newExp: Omit<Expense, "id">) => {
@@ -323,6 +345,8 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         whatIfCategory,
         whatIfCutPercent,
         userId,
+        isOnboarded,
+        isLoading,
         forecast,
         momComparison,
         recurringMatches,
@@ -344,6 +368,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         setWhatIf,
         addShorthand: handleAddShorthand,
         deleteShorthand: handleDeleteShorthand,
+        updateOnboarding,
         signOut,
       }}
     >
