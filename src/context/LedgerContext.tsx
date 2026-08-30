@@ -141,7 +141,17 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
     // Fetch shorthands
     const { data: shs } = await supabase.from('shorthands').select('*');
-    if (shs) setShorthands(shs as any);
+    if (shs && shs.length > 0) {
+      setShorthands(shs as any);
+    } else {
+      // Default shorthands if the user has none
+      setShorthands([
+        { id: "def-1", keyword: "lun", category: "Food", shop: "Lunch" },
+        { id: "def-2", keyword: "rickshaw", category: "Transport", shop: "Rickshaw" },
+        { id: "def-3", keyword: "agora", category: "Groceries", shop: "Agora Supermarket" },
+        { id: "def-4", keyword: "uber", category: "Transport", shop: "Uber" }
+      ]);
+    }
     
     setIsLoading(false);
   };

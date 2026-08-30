@@ -61,6 +61,14 @@ export default function LoginPage() {
               ? "Sign in to access your personal ledger"
               : "Start tracking your expenses and savings"}
           </p>
+          <div className="mt-4 p-3 bg-[#F6F5FB] rounded-xl border border-dashed border-[#A093D6]">
+            <p className="text-xs font-semibold text-slate-600">
+              You can create any account, or use the demo account:
+            </p>
+            <p className="text-xs font-bold text-[#634E9F] mt-1">
+              abc@cbd.com / 123456
+            </p>
+          </div>
         </div>
 
         {error && (
