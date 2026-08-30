@@ -3,7 +3,7 @@
 > **Team ID:** `LSH26-T061`  
 > **Problem ID:** `P12`  
 > **Repository:** `lsh26-t061-p12`  
-> **Design Theme:** Neo-Brutalism (Bold borders, vibrant accents, crisp contrast)  
+> **Design Theme:** Material
 > **Framework:** Next.js (App Router, TypeScript, React 19)
 
 ---

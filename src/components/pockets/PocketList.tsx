@@ -21,30 +21,30 @@ export const PocketList: React.FC = () => {
   return (
     <div className="flex flex-col gap-4">
       {/* Section Header */}
-      <div className="flex items-center justify-between flex-wrap gap-3 bg-white border border-gray-200 rounded-lg p-4 shadow-md">
+      <div className="flex items-center justify-between flex-wrap gap-3 bg-white rounded-2xl p-4 shadow-sm">
         <div className="flex items-center gap-3">
-          <div className="p-2 border border-gray-200 rounded-lg bg-white shadow-md">
+          <div className="p-2 rounded-2xl bg-white shadow-sm">
             <PiggyBank className="w-6 h-6 stroke-[2.5px]" />
           </div>
           <div>
-            <h2 className="font-semibold text-xl uppercase tracking-tight text-gray-900">
+            <h2 className="font-semibold text-xl uppercase tracking-tight text-slate-800">
               Savings Pockets & DPS Yields
             </h2>
-            <span className="text-xs font-bold text-gray-900">
+            <span className="text-xs font-bold text-slate-800">
               Forecast-derived completion timelines with compound DPS returns
             </span>
           </div>
         </div>
 
         <div className="flex items-center gap-3">
-          <Badge variant="white" size="md">
+          <Badge variant="outline" size="md">
             TOTAL: ৳{totalMonthlyCommitment.toLocaleString("en-IN")}/MO
           </Badge>
           <Button
-            variant="dark"
+            variant="primary"
             size="sm"
             onClick={() => setIsCreateOpen(true)}
-            icon={<Plus className="w-4 h-4" />}
+            
           >
             New Pocket
           </Button>
@@ -53,17 +53,17 @@ export const PocketList: React.FC = () => {
 
       {/* Grid of Pockets */}
       {pocketsWithProjections.length === 0 ? (
-        <Card variant="white" shadow="md">
+        <Card variant="outline" shadow="md">
           <div className="text-center py-10 flex flex-col items-center gap-3">
-            <Target className="w-12 h-12 text-gray-900" />
-            <p className="font-semibold text-base uppercase text-gray-900">
+            <Target className="w-12 h-12 text-slate-800" />
+            <p className="font-semibold text-base uppercase text-slate-800">
               No savings pockets created yet
             </p>
             <Button
               variant="secondary"
               size="md"
               onClick={() => setIsCreateOpen(true)}
-              icon={<Plus className="w-4 h-4" />}
+              
             >
               Create First Pocket
             </Button>

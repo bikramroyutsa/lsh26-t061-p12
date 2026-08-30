@@ -26,7 +26,7 @@ export const PocketCard: React.FC<PocketCardProps> = ({ pocket }) => {
   return (
     <>
       <Card
-        variant="white"
+        variant="outline"
         shadow="md"
         hoverLift
         header={
@@ -35,7 +35,7 @@ export const PocketCard: React.FC<PocketCardProps> = ({ pocket }) => {
               <Target className="w-5 h-5 stroke-[2.5px]" />
               <span>{pocket.name}</span>
             </div>
-            <Badge variant="dark" size="sm">
+            <Badge variant="primary" size="sm">
               {pocket.item}
             </Badge>
           </div>
@@ -45,34 +45,34 @@ export const PocketCard: React.FC<PocketCardProps> = ({ pocket }) => {
         <div className="flex flex-col gap-4">
           {/* Target & Forecast Completion Banner */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div className="border border-gray-200 rounded-lg p-3 bg-white shadow-md flex flex-col gap-0.5">
-              <span className="text-[10px] font-semibold uppercase text-gray-900">
+            <div className="bg-white rounded-2xl shadow-sm p-4 border border-gray-50 flex flex-col gap-0.5">
+              <span className="text-[10px] font-semibold uppercase text-slate-800">
                 Target Amount (BDT)
               </span>
-              <span className="text-xl font-semibold text-gray-900">
+              <span className="text-xl font-semibold text-slate-800">
                 ৳{pocket.target_bdt.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
               </span>
             </div>
 
             <div
-              className={`border border-gray-200 rounded-lg p-3 shadow-md flex flex-col gap-0.5 ${
+              className={`rounded-2xl p-3 shadow-sm flex flex-col gap-0.5 ${
                 pocket.isSurplusConstrained ? "bg-white" : "bg-white"
               }`}
             >
               <div className="flex items-center justify-between">
-                <span className="text-[10px] font-semibold uppercase text-gray-900 flex items-center gap-1">
+                <span className="text-[10px] font-semibold uppercase text-slate-800 flex items-center gap-1">
                   <Calendar className="w-3 h-3" /> Forecast Target Date
                 </span>
                 {pocket.isSurplusConstrained && (
-                  <span className="text-[9px] font-semibold bg-white text-gray-900 px-1 border border-gray-200">
+                  <span className="text-[9px] font-semibold bg-white text-slate-800 px-1 border-none">
                     Constrained
                   </span>
                 )}
               </div>
-              <span className="text-xl font-semibold text-gray-900">
+              <span className="text-xl font-semibold text-slate-800">
                 {pocket.calculatedCompletionDate}
               </span>
-              <span className="text-[10px] font-bold text-gray-900">
+              <span className="text-[10px] font-bold text-slate-800">
                 {pocket.calculatedMonths < 900
                   ? `~${pocket.calculatedMonths} months runway`
                   : "Requires higher surplus"}
@@ -81,7 +81,7 @@ export const PocketCard: React.FC<PocketCardProps> = ({ pocket }) => {
           </div>
 
           {/* Interactive Monthly Contribution Slider (Bonus 1) */}
-          <div className="border border-gray-200 rounded-lg p-3.5 bg-white shadow-md flex flex-col gap-2">
+          <div className="bg-white rounded-2xl shadow-sm p-4 border border-gray-50 flex flex-col gap-2">
             <Slider
               label="Monthly Contribution (Live Slider)"
               value={pocket.monthly_contribution_bdt}
@@ -95,13 +95,13 @@ export const PocketCard: React.FC<PocketCardProps> = ({ pocket }) => {
           </div>
 
           {/* DPS Return Teaser & Compound Details Button */}
-          <div className="border border-gray-200 rounded-lg p-3 bg-white shadow-md flex items-center justify-between flex-wrap gap-2">
+          <div className="bg-white rounded-2xl shadow-sm p-4 border border-gray-50 flex items-center justify-between flex-wrap gap-2">
             <div className="flex items-center gap-2">
-              <div className="p-1.5 bg-white border border-gray-200 rounded-lg shadow-md">
+              <div className="p-1.5 bg-white rounded-2xl shadow-sm">
                 <Landmark className="w-4 h-4" />
               </div>
               <div>
-                <span className="block text-[10px] font-semibold uppercase text-gray-900">
+                <span className="block text-[10px] font-semibold uppercase text-slate-800">
                   DPS Compound Yield ({pocket.dpsResult.annual_rate_percent}% p.a.)
                 </span>
                 <span className="font-semibold text-sm text-[#00B894]">
@@ -123,7 +123,7 @@ export const PocketCard: React.FC<PocketCardProps> = ({ pocket }) => {
           <div className="flex justify-end pt-1">
             <button
               onClick={() => deletePocket(pocket.id)}
-              className="text-xs font-bold text-[#FF6B6B] hover:text-gray-900 hover:underline flex items-center gap-1"
+              className="text-xs font-bold text-[#FF6B6B] hover:text-slate-800 hover:underline flex items-center gap-1"
             >
               <Trash2 className="w-3.5 h-3.5" /> Remove Pocket
             </button>

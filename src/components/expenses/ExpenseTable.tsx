@@ -53,7 +53,7 @@ export const ExpenseTable: React.FC<ExpenseTableProps> = ({ onOpenAddExpense }) 
 
   return (
     <Card
-      variant="white"
+      variant="outline"
       shadow="md"
       header={
         <div className="flex items-center justify-between w-full flex-wrap gap-2">
@@ -65,7 +65,7 @@ export const ExpenseTable: React.FC<ExpenseTableProps> = ({ onOpenAddExpense }) 
             <Badge variant="secondary" size="sm">
               {filteredExpenses.length} ENTRIES
             </Badge>
-            <Badge variant="mint" size="sm">
+            <Badge variant="primary" size="sm">
               TOTAL: ৳{totalFilteredSum.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
             </Badge>
           </div>
@@ -78,19 +78,19 @@ export const ExpenseTable: React.FC<ExpenseTableProps> = ({ onOpenAddExpense }) 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
           {/* Search Box */}
           <div className="relative flex items-center">
-            <Search className="absolute left-3 w-4 h-4 text-gray-900" />
+            <Search className="absolute left-3 w-4 h-4 text-slate-800" />
             <input
               type="text"
               placeholder="Search shop, category, date..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-9 pr-3 py-2 border border-gray-200 rounded-lg bg-white font-bold text-xs outline-none shadow-md"
+              className="w-full pl-9 pr-3 py-2 rounded-2xl bg-white font-bold text-xs outline-none shadow-sm"
             />
           </div>
 
           {/* Category Filter */}
-          <div className="flex items-center gap-2 bg-white border border-gray-200 rounded-lg px-2.5 py-1 shadow-md">
-            <Filter className="w-4 h-4 text-gray-900" />
+          <div className="flex items-center gap-2 bg-white rounded-2xl px-2.5 py-1 shadow-sm">
+            <Filter className="w-4 h-4 text-slate-800" />
             <select
               value={selectedCategoryFilter}
               onChange={(e) => setSelectedCategoryFilter(e.target.value)}
@@ -108,24 +108,24 @@ export const ExpenseTable: React.FC<ExpenseTableProps> = ({ onOpenAddExpense }) 
           <div className="flex items-center gap-2 justify-end">
             <button
               onClick={() => setShowOnlyRecurring(!showOnlyRecurring)}
-              className={`px-3 py-2 border border-gray-200 rounded-lg text-xs font-semibold uppercase transition-all shadow-md ${
+              className={`px-3 py-2 rounded-2xl text-xs font-semibold uppercase transition-all shadow-sm ${
                 showOnlyRecurring
-                  ? "bg-white text-gray-900"
-                  : "bg-white text-gray-900 hover:bg-gray-100"
+                  ? "bg-white text-slate-800"
+                  : "bg-white text-slate-800 hover:bg-gray-100"
               }`}
             >
               <Repeat className="w-3.5 h-3.5 inline mr-1" />
               Recurring Only
             </button>
 
-            <Button size="sm" variant="dark" onClick={onOpenAddExpense}>
+            <Button size="sm" variant="primary" onClick={onOpenAddExpense}>
               <Plus className="w-3.5 h-3.5 stroke-[3px]" /> Add
             </Button>
           </div>
         </div>
 
         {/* Expenses Table */}
-        <div className="border border-gray-200 rounded-lg overflow-x-auto shadow-md">
+        <div className="rounded-2xl overflow-x-auto shadow-sm">
           <table className="w-full text-left text-xs font-bold border-collapse bg-white">
             <thead className="bg-white border-gray-200 text-[11px] font-semibold uppercase">
               <tr>
@@ -140,7 +140,7 @@ export const ExpenseTable: React.FC<ExpenseTableProps> = ({ onOpenAddExpense }) 
             <tbody className="divide-y divide-black/10">
               {filteredExpenses.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="text-center py-8 text-gray-900 font-bold">
+                  <td colSpan={6} className="text-center py-8 text-slate-800 font-bold">
                     No expense records matching the active filters.
                   </td>
                 </tr>
@@ -153,38 +153,38 @@ export const ExpenseTable: React.FC<ExpenseTableProps> = ({ onOpenAddExpense }) 
                       key={e.id}
                       className="hover:bg-yellow-50/70 transition-colors"
                     >
-                      <td className="p-2.5 font-mono text-[11px] font-bold text-gray-900">
+                      <td className="p-2.5  text-[11px] font-bold text-slate-800">
                         {e.date}
                       </td>
-                      <td className="p-2.5 font-semibold text-gray-900">
+                      <td className="p-2.5 font-semibold text-slate-800">
                         {e.shop}
                         {e.notes && (
-                          <span className="block text-[10px] font-normal text-gray-900">
+                          <span className="block text-[10px] font-normal text-slate-800">
                             {e.notes}
                           </span>
                         )}
                       </td>
                       <td className="p-2.5">
-                        <Badge variant="white" size="sm">
+                        <Badge variant="outline" size="sm">
                           {e.category}
                         </Badge>
                       </td>
-                      <td className="p-2.5 text-right font-semibold text-sm text-gray-900">
+                      <td className="p-2.5 text-right font-semibold text-sm text-slate-800">
                         ৳{e.amount_bdt.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
                       </td>
                       <td className="p-2.5 text-center">
                         {isRecurring ? (
-                          <Badge variant="mint" size="sm" pill>
+                          <Badge variant="primary" size="sm" pill>
                             <Repeat className="w-2.5 h-2.5 stroke-[3px]" /> Recurring (2-Mo Match)
                           </Badge>
                         ) : (
-                          <span className="text-[10px] text-gray-900 font-bold">—</span>
+                          <span className="text-[10px] text-slate-800 font-bold">—</span>
                         )}
                       </td>
                       <td className="p-2.5 text-right">
                         <button
                           onClick={() => deleteExpense(e.id)}
-                          className="p-1 border border-gray-200 bg-white hover:bg-white text-gray-900 transition-colors shadow-md active:translate-x-0.5 active:translate-y-0.5"
+                          className="p-1 border-none bg-white hover:bg-white text-slate-800 transition-colors shadow-sm active:translate-x-0.5 active:translate-y-0.5"
                           title="Delete Expense"
                         >
                           <Trash2 className="w-3.5 h-3.5" />

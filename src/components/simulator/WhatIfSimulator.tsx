@@ -37,11 +37,11 @@ export const WhatIfSimulator: React.FC<WhatIfSimulatorProps> = ({
     >
       <div className="flex flex-col gap-6">
         {/* Intro */}
-        <div className="border border-gray-200 rounded-lg p-3.5 bg-white shadow-md flex items-center gap-3">
-          <div className="p-2 border border-gray-200 rounded-lg bg-white shadow-md">
+        <div className="bg-white rounded-2xl shadow-sm p-4 border border-gray-50 flex items-center gap-3">
+          <div className="p-2 rounded-2xl bg-white shadow-sm">
             <Sliders className="w-5 h-5 stroke-[2.5px]" />
           </div>
-          <div className="text-xs font-bold text-gray-900">
+          <div className="text-xs font-bold text-slate-800">
             Select an expense category and simulate a percentage spending reduction. Watch how extra savings instantly pull forward completion dates for all your savings pockets!
           </div>
         </div>
@@ -49,14 +49,14 @@ export const WhatIfSimulator: React.FC<WhatIfSimulatorProps> = ({
         {/* Controls */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {/* Category Selector */}
-          <div className="border border-gray-200 rounded-lg p-4 bg-white shadow-md flex flex-col gap-2">
-            <label className="text-xs font-semibold uppercase text-gray-900">
+          <div className="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] p-6 sm:p-8 flex flex-col gap-2">
+            <label className="text-xs font-semibold uppercase text-slate-800">
               1. Select Category to Optimize
             </label>
             <select
               value={whatIfCategory}
               onChange={(e) => setWhatIf(e.target.value, whatIfCutPercent)}
-              className="w-full p-2.5 font-semibold text-sm border border-gray-200 rounded-lg bg-white outline-none shadow-md"
+              className="w-full p-2.5 font-semibold text-sm rounded-2xl bg-white outline-none shadow-sm"
             >
               {allCategories.map((cat) => (
                 <option key={cat} value={cat}>
@@ -67,7 +67,7 @@ export const WhatIfSimulator: React.FC<WhatIfSimulatorProps> = ({
           </div>
 
           {/* Cut Percentage Slider */}
-          <div className="border border-gray-200 rounded-lg p-4 bg-white shadow-md flex flex-col justify-center">
+          <div className="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] p-6 sm:p-8 flex flex-col justify-center">
             <Slider
               label="2. Spending Cut Percentage"
               value={whatIfCutPercent}
@@ -83,17 +83,17 @@ export const WhatIfSimulator: React.FC<WhatIfSimulatorProps> = ({
         {/* Real-time Calculation Results Banner */}
         {whatIfResult && whatIfCutPercent > 0 ? (
           <div className="flex flex-col gap-4">
-            <div className="border border-gray-200 rounded-lg p-4 bg-white shadow-md grid grid-cols-1 sm:grid-cols-3 gap-3 text-center">
+            <div className="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] p-6 sm:p-8 grid grid-cols-1 sm:grid-cols-3 gap-3 text-center">
               <div>
-                <span className="text-[10px] font-semibold uppercase text-gray-900 block">
+                <span className="text-[10px] font-semibold uppercase text-slate-800 block">
                   Category Forecast
                 </span>
-                <span className="text-base font-semibold text-gray-900">
+                <span className="text-base font-semibold text-slate-800">
                   ৳{whatIfResult.current_category_projected_bdt.toLocaleString("en-IN")}
                 </span>
               </div>
               <div>
-                <span className="text-[10px] font-semibold uppercase text-gray-900 block">
+                <span className="text-[10px] font-semibold uppercase text-slate-800 block">
                   Monthly Cash Saved
                 </span>
                 <span className="text-base font-semibold text-[#00B894]">
@@ -101,10 +101,10 @@ export const WhatIfSimulator: React.FC<WhatIfSimulatorProps> = ({
                 </span>
               </div>
               <div>
-                <span className="text-[10px] font-semibold uppercase text-gray-900 block">
+                <span className="text-[10px] font-semibold uppercase text-slate-800 block">
                   New Projected Surplus
                 </span>
-                <span className="text-base font-semibold text-gray-900">
+                <span className="text-base font-semibold text-slate-800">
                   ৳{whatIfResult.new_projected_surplus_bdt.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
                 </span>
               </div>
@@ -112,11 +112,11 @@ export const WhatIfSimulator: React.FC<WhatIfSimulatorProps> = ({
 
             {/* Impact on Pockets Table */}
             <div className="flex flex-col gap-2">
-              <span className="text-xs font-semibold text-sm text-gray-500 text-gray-900 flex items-center gap-1.5">
+              <span className="text-xs font-semibold text-sm text-gray-500 text-slate-800 flex items-center gap-1.5">
                 <Sparkles className="w-4 h-4 text-[#FFD93D]" /> Immediate Effect on Savings Pocket Target Dates
               </span>
 
-              <div className="border border-gray-200 rounded-lg overflow-x-auto shadow-md">
+              <div className="rounded-2xl overflow-x-auto shadow-sm">
                 <table className="w-full text-left text-xs font-bold border-collapse bg-white">
                   <thead className="bg-white border-gray-200 text-[11px] font-semibold uppercase">
                     <tr>
@@ -130,25 +130,25 @@ export const WhatIfSimulator: React.FC<WhatIfSimulatorProps> = ({
                     {whatIfResult.shifts.map((shift) => (
                       <tr key={shift.pocket_id} className="hover:bg-cyan-50">
                         <td className="p-2.5">
-                          <span className="font-semibold block text-gray-900">{shift.pocket_name}</span>
-                          <span className="text-[10px] text-gray-900">{shift.item}</span>
+                          <span className="font-semibold block text-slate-800">{shift.pocket_name}</span>
+                          <span className="text-[10px] text-slate-800">{shift.item}</span>
                         </td>
-                        <td className="p-2.5 text-gray-900">
+                        <td className="p-2.5 text-slate-800">
                           {shift.original_completion_date}
                         </td>
-                        <td className="p-2.5 font-semibold text-gray-900">
-                          <span className="bg-white px-2 py-0.5 border border-gray-200 shadow-md inline-flex items-center gap-1">
+                        <td className="p-2.5 font-semibold text-slate-800">
+                          <span className="bg-[#EAE5F8] text-[#554089] px-2 py-0.5 rounded-full border-none shadow-sm inline-flex items-center gap-1">
                             <CheckCircle className="w-3 h-3 stroke-[3px]" />
                             {shift.new_completion_date}
                           </span>
                         </td>
                         <td className="p-2.5 text-right">
                           {shift.months_saved > 0 ? (
-                            <Badge variant="accent" size="sm">
+                            <Badge variant="primary" size="sm">
                               {shift.months_saved} MONTHS FASTER
                             </Badge>
                           ) : (
-                            <span className="text-[10px] text-gray-900 font-bold">Unchanged</span>
+                            <span className="text-[10px] text-slate-800 font-bold">Unchanged</span>
                           )}
                         </td>
                       </tr>
@@ -159,7 +159,7 @@ export const WhatIfSimulator: React.FC<WhatIfSimulatorProps> = ({
             </div>
           </div>
         ) : (
-          <div className="p-6 text-center border border-dashed border-gray-200 bg-white/50 text-xs font-bold text-gray-900">
+          <div className="p-6 text-center border border-dashed border-gray-200 bg-white/50 text-xs font-bold text-slate-800">
             Slide the cut percentage above 0% to see live pocket completion dates shift forward.
           </div>
         )}

@@ -97,10 +97,10 @@ export const ReceiptUploadModal: React.FC<ReceiptUploadModalProps> = ({
       maxWidth="xl"
     >
       <div className="flex flex-col gap-5">
-        {/* Sample Dhaka Memos for Instant Demo */}
+        {/* Sample Memos for Instant Demo */}
         <div className="flex flex-col gap-2">
-          <span className="text-xs font-semibold text-sm text-gray-500 text-gray-900 flex items-center gap-1.5">
-            <Sparkles className="w-4 h-4 text-[#FF6B6B]" /> Quick Test: Choose Sample Dhaka Memo
+          <span className="text-xs font-semibold text-sm text-gray-500 text-slate-800 flex items-center gap-1.5">
+            <Sparkles className="w-4 h-4 text-[#FF6B6B]" /> Quick Test: Choose Sample Memo
           </span>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
             {SAMPLE_RECEIPTS.map((sample, idx) => (
@@ -108,7 +108,7 @@ export const ReceiptUploadModal: React.FC<ReceiptUploadModalProps> = ({
                 key={idx}
                 type="button"
                 onClick={() => handleSampleSelect(sample.preview)}
-                className="p-2 border border-gray-200 rounded-lg bg-white hover:bg-white text-[11px] font-bold text-left shadow-md active:translate-x-0.5 active:translate-y-0.5 transition-all truncate"
+                className="p-2 rounded-2xl bg-white hover:bg-white text-[11px] font-bold text-left shadow-sm active:translate-x-0.5 active:translate-y-0.5 transition-all truncate"
               >
                 📄 {sample.name}
               </button>
@@ -119,12 +119,12 @@ export const ReceiptUploadModal: React.FC<ReceiptUploadModalProps> = ({
         {/* Upload Zone & Manual Text Paste */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {/* File Upload Dropzone */}
-          <label className="border border-dashed border-gray-200 p-4 bg-white shadow-md flex flex-col items-center justify-center gap-2 cursor-pointer hover:bg-yellow-50 transition-colors">
-            <Camera className="w-8 h-8 text-gray-900" />
+          <label className="border border-dashed border-gray-200 p-4 bg-white shadow-sm flex flex-col items-center justify-center gap-2 cursor-pointer hover:bg-yellow-50 transition-colors">
+            <Camera className="w-8 h-8 text-slate-800" />
             <span className="text-xs font-semibold uppercase text-center">
               Upload Memo / Receipt Photo
             </span>
-            <span className="text-[10px] font-bold text-gray-900">PNG, JPG, or PDF</span>
+            <span className="text-[10px] font-bold text-slate-800">PNG, JPG, or PDF</span>
             <input
               type="file"
               accept="image/*"
@@ -134,8 +134,8 @@ export const ReceiptUploadModal: React.FC<ReceiptUploadModalProps> = ({
           </label>
 
           {/* Paste Memo Text */}
-          <div className="border border-gray-200 rounded-lg p-3 bg-white shadow-md flex flex-col gap-1.5">
-            <span className="text-[11px] font-semibold uppercase text-gray-900">
+          <div className="bg-white rounded-2xl shadow-sm p-4 border border-gray-50 flex flex-col gap-1.5">
+            <span className="text-[11px] font-semibold uppercase text-slate-800">
               Or Paste Receipt Text
             </span>
             <textarea
@@ -143,7 +143,7 @@ export const ReceiptUploadModal: React.FC<ReceiptUploadModalProps> = ({
               value={rawText}
               onChange={(e) => handleRunOCR(e.target.value)}
               placeholder="Paste receipt, bKash SMS, or memo text here..."
-              className="w-full text-xs font-bold border border-gray-200 rounded-lg p-2 bg-white outline-none"
+              className="w-full text-xs font-bold bg-[#F6F5FB] rounded-xl p-3 bg-white outline-none"
             />
           </div>
         </div>
@@ -152,20 +152,20 @@ export const ReceiptUploadModal: React.FC<ReceiptUploadModalProps> = ({
         {ocrResult && (
           <form
             onSubmit={handleSaveExpense}
-            className="border border-gray-200 rounded-lg p-4 bg-white shadow-md flex flex-col gap-4"
+            className="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] p-6 sm:p-8 flex flex-col gap-4"
           >
             <div className="flex items-center justify-between border-gray-200 pb-2">
-              <span className="font-semibold text-sm uppercase text-gray-900 flex items-center gap-1.5">
+              <span className="font-semibold text-sm uppercase text-slate-800 flex items-center gap-1.5">
                 <CheckCircle className="w-4 h-4 text-[#00B894]" /> Review Extracted Details
               </span>
-              <span className="text-[10px] font-semibold bg-white px-2 py-0.5 border border-gray-200">
+              <span className="text-[10px] font-semibold bg-[#EAE5F8] text-[#554089] px-2 py-0.5 rounded-full border-none">
                 Verify Before Saving
               </span>
             </div>
 
             {/* Uncertainty Warnings */}
             {ocrResult.warnings.length > 0 && (
-              <div className="p-3 bg-white border border-[#FF6B6B] flex flex-col gap-1 text-xs font-bold text-gray-900">
+              <div className="p-3 bg-white border border-[#FF6B6B] flex flex-col gap-1 text-xs font-bold text-slate-800">
                 <div className="flex items-center gap-1.5 font-semibold uppercase text-[#FF6B6B]">
                   <AlertTriangle className="w-4 h-4" /> Uncertainty Safeguard Active:
                 </div>
@@ -176,7 +176,7 @@ export const ReceiptUploadModal: React.FC<ReceiptUploadModalProps> = ({
             )}
 
             {error && (
-              <div className="p-2.5 bg-white border border-[#FF6B6B] text-xs font-bold text-gray-900">
+              <div className="p-2.5 bg-white border border-[#FF6B6B] text-xs font-bold text-slate-800">
                 ⚠️ {error}
               </div>
             )}
@@ -190,7 +190,7 @@ export const ReceiptUploadModal: React.FC<ReceiptUploadModalProps> = ({
                     Amount (BDT) *
                   </label>
                   {ocrResult.amount.isUncertain && (
-                    <Badge variant="accent" size="sm">
+                    <Badge variant="primary" size="sm">
                       UNSURE: INPUT REQUIRED
                     </Badge>
                   )}
@@ -201,7 +201,7 @@ export const ReceiptUploadModal: React.FC<ReceiptUploadModalProps> = ({
                   placeholder="e.g. 2475.00"
                   value={amount}
                   onChange={(e) => setAmount(e.target.value)}
-                  className={`w-full bg-white border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500 ${
+                  className={`w-full bg-white border-none rounded-full bg-[#F6F5FB] px-4 py-2 focus:ring-2 focus:ring-indigo-500 ${
                     ocrResult.amount.isUncertain ? "bg-white border-[#FF6B6B]" : ""
                   }`}
                   required
@@ -215,7 +215,7 @@ export const ReceiptUploadModal: React.FC<ReceiptUploadModalProps> = ({
                     Shop / Merchant *
                   </label>
                   {ocrResult.shop.isUncertain && (
-                    <Badge variant="accent" size="sm">
+                    <Badge variant="primary" size="sm">
                       UNSURE
                     </Badge>
                   )}
@@ -225,7 +225,7 @@ export const ReceiptUploadModal: React.FC<ReceiptUploadModalProps> = ({
                   placeholder="e.g. Meena Bazar"
                   value={shop}
                   onChange={(e) => setShop(e.target.value)}
-                  className="w-full bg-white border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500"
+                  className="w-full bg-white border-none rounded-full bg-[#F6F5FB] px-4 py-2 focus:ring-2 focus:ring-indigo-500"
                   required
                 />
               </div>
@@ -244,7 +244,7 @@ export const ReceiptUploadModal: React.FC<ReceiptUploadModalProps> = ({
                   type="date"
                   value={date}
                   onChange={(e) => setDate(e.target.value)}
-                  className="w-full bg-white border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500"
+                  className="w-full bg-white border-none rounded-full bg-[#F6F5FB] px-4 py-2 focus:ring-2 focus:ring-indigo-500"
                   required
                 />
               </div>
@@ -255,7 +255,7 @@ export const ReceiptUploadModal: React.FC<ReceiptUploadModalProps> = ({
                 <select
                   value={category}
                   onChange={(e) => setCategory(e.target.value)}
-                  className="w-full bg-white border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500 font-bold"
+                  className="w-full bg-white border-none rounded-full bg-[#F6F5FB] px-4 py-2 focus:ring-2 focus:ring-indigo-500 font-bold"
                 >
                   <option value="Groceries">Groceries</option>
                   <option value="Food">Food</option>
@@ -274,7 +274,7 @@ export const ReceiptUploadModal: React.FC<ReceiptUploadModalProps> = ({
 
             {/* Actions */}
             <div className="flex justify-end gap-2 pt-2">
-              <Button type="button" variant="white" onClick={() => setOcrResult(null)}>
+              <Button type="button" variant="outline" onClick={() => setOcrResult(null)}>
                 Clear
               </Button>
               <Button type="submit" variant="secondary">

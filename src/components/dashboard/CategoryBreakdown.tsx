@@ -45,7 +45,7 @@ export const CategoryBreakdown: React.FC = () => {
 
   return (
     <Card
-      variant="white"
+      variant="outline"
       shadow="md"
       header={
         <div className="flex items-center justify-between w-full">
@@ -53,7 +53,7 @@ export const CategoryBreakdown: React.FC = () => {
             <PieChart className="w-5 h-5 stroke-[2.5px]" />
             <span>Category Spending Breakdown</span>
           </div>
-          <span className="text-xs font-bold text-gray-900">
+          <span className="text-xs font-bold text-slate-800">
             {sortedCategories.length} Active Categories
           </span>
         </div>
@@ -61,7 +61,7 @@ export const CategoryBreakdown: React.FC = () => {
       headerBg="muted"
     >
       {sortedCategories.length === 0 ? (
-        <div className="text-center py-8 font-bold text-gray-900">
+        <div className="text-center py-8 font-bold text-slate-800">
           No expenses recorded for {selectedMonth}.
         </div>
       ) : (
@@ -71,24 +71,24 @@ export const CategoryBreakdown: React.FC = () => {
             return (
               <div
                 key={item.category}
-                className="border border-gray-200 rounded-lg p-3 bg-white shadow-md flex flex-col gap-2 hover:bg-white transition-all"
+                className="bg-white rounded-2xl shadow-sm p-4 border border-gray-50 flex flex-col gap-2 hover:bg-white transition-all"
               >
                 <div className="flex items-center justify-between flex-wrap gap-2">
                   <div className="flex items-center gap-2">
                     <span
-                      className="w-4 h-4 border border-gray-200 rounded-lg inline-block shadow-md"
+                      className="w-4 h-4 rounded-2xl inline-block shadow-sm"
                       style={{ backgroundColor: barBg }}
                     />
                     <span className="font-semibold text-sm uppercase">{item.category}</span>
-                    <span className="text-xs font-bold text-gray-900">({item.count} items)</span>
+                    <span className="text-xs font-bold text-slate-800">({item.count} items)</span>
                   </div>
 
                   <div className="flex items-center gap-3">
                     {/* MoM Delta Indicator */}
                     {item.delta_bdt !== 0 && (
                       <span
-                        className={`text-xs font-bold flex items-center gap-0.5 px-1.5 py-0.5 border border-gray-200 ${
-                          item.delta_bdt > 0 ? "bg-white text-[#FF6B6B]" : "bg-white text-gray-900"
+                        className={`text-xs font-bold flex items-center gap-0.5 px-1.5 py-0.5 border-none ${
+                          item.delta_bdt > 0 ? "bg-white text-[#FF6B6B]" : "bg-white text-slate-800"
                         }`}
                       >
                         {item.delta_bdt > 0 ? (
@@ -100,17 +100,17 @@ export const CategoryBreakdown: React.FC = () => {
                       </span>
                     )}
 
-                    <span className="font-semibold text-sm text-gray-900">
+                    <span className="font-semibold text-sm text-slate-800">
                       ৳{item.total.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
                     </span>
-                    <Badge variant="white" size="sm">
+                    <Badge variant="outline" size="sm">
                       {item.percentage}%
                     </Badge>
                   </div>
                 </div>
 
                 {/* Progress bar */}
-                <div className="w-full h-3.5 bg-white border border-gray-200 rounded-lg overflow-hidden relative">
+                <div className="w-full h-3.5 bg-white rounded-2xl overflow-hidden relative">
                   <div
                     className="h-full border-gray-200 transition-all duration-300"
                     style={{

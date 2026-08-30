@@ -33,20 +33,20 @@ export const DPSBreakdownModal: React.FC<DPSBreakdownModalProps> = ({
     >
       <div className="flex flex-col gap-5">
         {/* Stated DPS Rate & Rule Explanation */}
-        <div className="border border-gray-200 rounded-lg p-4 bg-white shadow-md flex flex-col gap-2">
+        <div className="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] p-6 sm:p-8 flex flex-col gap-2">
           <div className="flex items-center justify-between flex-wrap gap-2">
             <div className="flex items-center gap-2">
-              <Landmark className="w-5 h-5 text-gray-900" />
+              <Landmark className="w-5 h-5 text-slate-800" />
               <span className="font-semibold text-sm uppercase">
                 Bangladesh Banking DPS Standard
               </span>
             </div>
-            <Badge variant="accent" size="sm">
+            <Badge variant="primary" size="sm">
               RATE: {dpsResult.annual_rate_percent.toFixed(2)}% P.A.
             </Badge>
           </div>
-          <div className="text-xs font-bold text-gray-900 bg-white border border-gray-200 rounded-lg p-2.5">
-            <span className="font-semibold block uppercase text-[10px] text-gray-900 mb-1">
+          <div className="text-xs font-bold text-slate-800 bg-white bg-[#F6F5FB] rounded-xl p-3.5">
+            <span className="font-semibold block uppercase text-[10px] text-slate-800 mb-1">
               Interest Calculation & Compounding Rule:
             </span>
             {dpsRule ||
@@ -56,17 +56,17 @@ export const DPSBreakdownModal: React.FC<DPSBreakdownModalProps> = ({
 
         {/* Summary Numbers */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-center">
-          <div className="border border-gray-200 rounded-lg p-3 bg-white shadow-md">
-            <span className="block text-[10px] font-semibold uppercase text-gray-900">
+          <div className="bg-white rounded-2xl shadow-sm p-4 border border-gray-50">
+            <span className="block text-[10px] font-semibold uppercase text-slate-800">
               Total Principal Deposited
             </span>
-            <span className="text-lg font-semibold text-gray-900">
+            <span className="text-lg font-semibold text-slate-800">
               ৳{dpsResult.total_principal_bdt.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
             </span>
           </div>
 
-          <div className="border border-gray-200 rounded-lg p-3 bg-white shadow-md">
-            <span className="block text-[10px] font-semibold uppercase text-gray-900">
+          <div className="bg-white rounded-2xl shadow-sm p-4 border border-gray-50">
+            <span className="block text-[10px] font-semibold uppercase text-slate-800">
               Compound Interest Earned
             </span>
             <span className="text-lg font-semibold text-[#00B894]">
@@ -74,11 +74,11 @@ export const DPSBreakdownModal: React.FC<DPSBreakdownModalProps> = ({
             </span>
           </div>
 
-          <div className="border border-gray-200 rounded-lg p-3 bg-white shadow-md">
-            <span className="block text-[10px] font-semibold uppercase text-gray-900">
+          <div className="bg-white rounded-2xl shadow-sm p-4 border border-gray-50">
+            <span className="block text-[10px] font-semibold uppercase text-slate-800">
               Maturity Total (Return)
             </span>
-            <span className="text-lg font-semibold text-gray-900">
+            <span className="text-lg font-semibold text-slate-800">
               ৳{dpsResult.maturity_amount_bdt.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
             </span>
           </div>
@@ -86,10 +86,10 @@ export const DPSBreakdownModal: React.FC<DPSBreakdownModalProps> = ({
 
         {/* Month-by-Month Compound Schedule */}
         <div className="flex flex-col gap-2">
-          <span className="text-xs font-semibold text-sm text-gray-500 text-gray-900 flex items-center gap-1.5">
+          <span className="text-xs font-semibold text-sm text-gray-500 text-slate-800 flex items-center gap-1.5">
             <TrendingUp className="w-4 h-4" /> Month-by-Month Compounding Schedule (First {Math.min(24, dpsResult.schedule.length)} Months)
           </span>
-          <div className="overflow-x-auto max-h-60 border border-gray-200 rounded-lg shadow-md">
+          <div className="overflow-x-auto max-h-60 rounded-2xl shadow-sm">
             <table className="w-full text-left text-xs font-bold border-collapse bg-white">
               <thead className="sticky top-0 bg-white border-gray-200 text-[11px] font-semibold uppercase">
                 <tr>
@@ -105,13 +105,13 @@ export const DPSBreakdownModal: React.FC<DPSBreakdownModalProps> = ({
                   <tr key={row.month} className="hover:bg-yellow-50">
                     <td className="p-2 font-semibold">Month {row.month}</td>
                     <td className="p-2 text-right">৳{row.deposit_bdt.toLocaleString("en-IN")}</td>
-                    <td className="p-2 text-right text-gray-900">
+                    <td className="p-2 text-right text-slate-800">
                       ৳{row.balance_before_interest_bdt.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
                     </td>
                     <td className="p-2 text-right font-semibold text-[#00B894]">
                       +৳{row.interest_earned_bdt.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
                     </td>
-                    <td className="p-2 text-right font-semibold text-gray-900">
+                    <td className="p-2 text-right font-semibold text-slate-800">
                       ৳{row.closing_balance_bdt.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
                     </td>
                   </tr>

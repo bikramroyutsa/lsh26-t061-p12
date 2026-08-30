@@ -12,7 +12,7 @@ export const ForecastCard: React.FC = () => {
 
   return (
     <Card
-      variant="white"
+      variant="outline"
       shadow="md"
       header={
         <div className="flex items-center justify-between w-full">
@@ -29,14 +29,14 @@ export const ForecastCard: React.FC = () => {
     >
       {/* Month-End Surplus / Deficit Big Banner */}
       <div
-        className={`border border-gray-200 rounded-lg p-5 mb-5 shadow-md flex items-center justify-between flex-wrap gap-4 ${
+        className={`rounded-2xl p-5 mb-5 shadow-sm flex items-center justify-between flex-wrap gap-4 ${
           forecast.is_deficit ? "bg-white" : "bg-white"
         }`}
       >
         <div className="flex items-center gap-3.5">
           <div
-            className={`p-2.5 border border-gray-200 rounded-lg shadow-md ${
-              forecast.is_deficit ? "bg-white text-gray-900" : "bg-white text-gray-900"
+            className={`p-2.5 rounded-2xl shadow-sm ${
+              forecast.is_deficit ? "bg-white text-slate-800" : "bg-white text-slate-800"
             }`}
           >
             {forecast.is_deficit ? (
@@ -46,12 +46,12 @@ export const ForecastCard: React.FC = () => {
             )}
           </div>
           <div>
-            <span className="text-xs font-semibold text-sm text-gray-500 block text-gray-900">
+            <span className="text-xs font-semibold text-sm text-gray-500 block text-slate-800">
               {forecast.is_deficit ? "Projected Month-End Deficit (Shortfall)" : "Projected Month-End Net Savings (Surplus)"}
             </span>
             <span
               className={`text-2xl sm:text-3xl font-semibold ${
-                forecast.is_deficit ? "text-[#FF6B6B]" : "text-gray-900"
+                forecast.is_deficit ? "text-[#FF6B6B]" : "text-slate-800"
               }`}
             >
               {forecast.is_deficit ? "- " : "+ "}৳
@@ -62,9 +62,9 @@ export const ForecastCard: React.FC = () => {
           </div>
         </div>
 
-        <div className="bg-white border border-gray-200 rounded-lg p-2.5 shadow-md text-xs font-bold">
-          <span className="block text-gray-900 uppercase text-[10px]">Projected Budget Used:</span>
-          <span className="text-base font-semibold text-gray-900">
+        <div className="bg-white bg-[#F6F5FB] rounded-xl p-3.5 shadow-sm text-xs font-bold">
+          <span className="block text-slate-800 uppercase text-[10px]">Projected Budget Used:</span>
+          <span className="text-base font-semibold text-slate-800">
             {forecast.budget_utilization_projected_percent.toFixed(1)}%
           </span>
         </div>
@@ -73,44 +73,44 @@ export const ForecastCard: React.FC = () => {
       {/* Forecast Metric Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {/* Daily Burn Rate */}
-        <div className="border border-gray-200 rounded-lg p-3.5 bg-white shadow-md flex flex-col gap-1">
-          <div className="flex items-center gap-1.5 text-xs font-semibold uppercase text-gray-900">
+        <div className="bg-white rounded-2xl shadow-sm p-4 border border-gray-50 flex flex-col gap-1">
+          <div className="flex items-center gap-1.5 text-xs font-semibold uppercase text-slate-800">
             <Flame className="w-4 h-4 text-[#FF6B6B]" />
             <span>Daily Burn Rate</span>
           </div>
-          <span className="text-xl font-semibold text-gray-900">
+          <span className="text-xl font-semibold text-slate-800">
             ৳{forecast.daily_burn_rate_bdt.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
-            <span className="text-xs font-bold text-gray-900">/day</span>
+            <span className="text-xs font-bold text-slate-800">/day</span>
           </span>
-          <span className="text-[11px] font-bold text-gray-900">
+          <span className="text-[11px] font-bold text-slate-800">
             Over past {forecast.elapsed_days} days
           </span>
         </div>
 
         {/* Expected Rest of Month Spending */}
-        <div className="border border-gray-200 rounded-lg p-3.5 bg-white shadow-md flex flex-col gap-1">
-          <div className="flex items-center gap-1.5 text-xs font-semibold uppercase text-gray-900">
+        <div className="bg-white rounded-2xl shadow-sm p-4 border border-gray-50 flex flex-col gap-1">
+          <div className="flex items-center gap-1.5 text-xs font-semibold uppercase text-slate-800">
             <CalendarClock className="w-4 h-4 text-[#00E5FF]" />
             <span>Remaining Spending</span>
           </div>
-          <span className="text-xl font-semibold text-gray-900">
+          <span className="text-xl font-semibold text-slate-800">
             ৳{forecast.projected_remaining_spend_bdt.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
           </span>
-          <span className="text-[11px] font-bold text-gray-900">
+          <span className="text-[11px] font-bold text-slate-800">
             For remaining {forecast.remaining_days} days
           </span>
         </div>
 
         {/* Total Projected Monthly Spend */}
-        <div className="border border-gray-200 rounded-lg p-3.5 bg-white shadow-md flex flex-col gap-1">
-          <div className="flex items-center gap-1.5 text-xs font-semibold uppercase text-gray-900">
+        <div className="bg-white rounded-2xl shadow-sm p-4 border border-gray-50 flex flex-col gap-1">
+          <div className="flex items-center gap-1.5 text-xs font-semibold uppercase text-slate-800">
             <Coins className="w-4 h-4 text-[#FF9F1C]" />
             <span>Total Month Spend</span>
           </div>
-          <span className="text-xl font-semibold text-gray-900">
+          <span className="text-xl font-semibold text-slate-800">
             ৳{forecast.total_projected_spend_bdt.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
           </span>
-          <span className="text-[11px] font-bold text-gray-900">
+          <span className="text-[11px] font-bold text-slate-800">
             Against ৳{forecast.salary_bdt.toLocaleString("en-IN")} salary
           </span>
         </div>

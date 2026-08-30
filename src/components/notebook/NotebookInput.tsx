@@ -72,20 +72,20 @@ export const NotebookInput: React.FC = () => {
   return (
     <div className="flex flex-col gap-4">
       {/* Main Notebook Input Box */}
-      <div className="border border-gray-200 rounded-lg bg-white p-6 sm:p-8 shadow-md relative overflow-hidden">
+      <div className="rounded-2xl bg-white p-6 sm:p-8 shadow-sm relative overflow-hidden">
         {/* Top Header Row with Date Badge & Title */}
         <div className="flex items-center justify-between flex-wrap gap-3 mb-4">
           <div className="flex items-center gap-2">
-            <div className="w-3.5 h-3.5 bg-white border border-gray-200 rounded-lg rounded-full" />
-            <div className="w-3.5 h-3.5 bg-white border border-gray-200 rounded-lg rounded-full" />
-            <div className="w-3.5 h-3.5 bg-white border border-gray-200 rounded-lg rounded-full" />
-            <span className="text-xs sm:text-sm font-semibold text-sm text-gray-500 ml-2 bg-white px-2 py-0.5 border border-gray-200 rounded-lg shadow-md">
-              📓 DHAKA QUICK NOTEBOOK
+            <div className="w-3.5 h-3.5 bg-white rounded-2xl rounded-full" />
+            <div className="w-3.5 h-3.5 bg-white rounded-2xl rounded-full" />
+            <div className="w-3.5 h-3.5 bg-white rounded-2xl rounded-full" />
+            <span className="text-xs sm:text-sm font-semibold text-sm text-gray-500 ml-2 bg-[#EAE5F8] text-[#554089] px-2 py-0.5 rounded-full rounded-2xl shadow-sm">
+              📓 QUICK NOTEBOOK
             </span>
           </div>
 
           <div className="flex items-center gap-2">
-            <span className="text-xs font-semibold uppercase text-gray-900 flex items-center gap-1 bg-white px-2.5 py-1 border border-gray-200 rounded-lg shadow-md">
+            <span className="text-xs font-semibold uppercase text-slate-800 flex items-center gap-1 bg-white px-2.5 py-1 rounded-2xl shadow-sm">
               <Calendar className="w-3.5 h-3.5 stroke-[2.5px]" /> {todayDate}
             </span>
           </div>
@@ -102,13 +102,13 @@ export const NotebookInput: React.FC = () => {
                 onChange={(e) => setInputVal(e.target.value)}
                 placeholder='Type shorthand: "lun 500", "rickshaw 60", "agora 1200", "uber 250"'
                 autoFocus
-                className="w-full text-lg sm:text-2xl font-semibold text-gray-900 bg-white border border-gray-200 rounded-lg px-4 sm:px-6 py-4 outline-none shadow-md focus:shadow-md focus:bg-white placeholder:text-gray-900 font-mono transition-all"
+                className="w-full text-lg sm:text-2xl font-semibold text-slate-800 bg-white rounded-2xl px-4 sm:px-6 py-4 outline-none shadow-sm focus:shadow-sm focus:bg-white placeholder:text-slate-800  transition-all"
               />
               {inputVal && (
                 <button
                   type="button"
                   onClick={() => setInputVal("")}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-semibold bg-indigo-600 text-white px-2 py-1 uppercase hover:bg-white hover:text-gray-900 transition-colors"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-semibold bg-[#634E9F] text-white px-2 py-1 uppercase hover:bg-white hover:text-slate-800 transition-colors"
                 >
                   Clear
                 </button>
@@ -117,11 +117,11 @@ export const NotebookInput: React.FC = () => {
 
             <Button
               type="submit"
-              variant="accent"
+              variant="primary"
               size="lg"
               disabled={!parsed?.isValid}
               className="text-base font-semibold text-sm text-gray-500 min-w-[140px]"
-              icon={<CornerDownLeft className="w-5 h-5 stroke-[3px]" />}
+              
             >
               Add [↵]
             </Button>
@@ -130,47 +130,47 @@ export const NotebookInput: React.FC = () => {
           {/* Live Auto-Detection Pill */}
           {parsed && (
             <div
-              className={`p-3 border border-gray-200 rounded-lg flex items-center justify-between flex-wrap gap-2 transition-all ${
+              className={`p-3 rounded-2xl flex items-center justify-between flex-wrap gap-2 transition-all ${
                 parsed.isValid
-                  ? "bg-white border-gray-200 shadow-md animate-in fade-in zoom-in-95"
+                  ? "bg-white border-gray-200 shadow-sm animate-in fade-in zoom-in-95"
                   : "bg-white border-gray-200"
               }`}
             >
               <div className="flex items-center gap-3 flex-wrap">
-                <span className="text-xs font-semibold text-sm text-gray-500 text-gray-900 flex items-center gap-1">
+                <span className="text-xs font-semibold text-sm text-gray-500 text-slate-800 flex items-center gap-1">
                   {parsed.isValid ? (
                     <>
-                      <Sparkles className="w-4 h-4 text-gray-900 stroke-[2.5px]" /> AUTO-DETECTED:
+                      <Sparkles className="w-4 h-4 text-slate-800 stroke-[2.5px]" /> AUTO-DETECTED:
                     </>
                   ) : (
                     <>
-                      <HelpCircle className="w-4 h-4 text-gray-900 stroke-[2.5px]" /> WAITING FOR AMOUNT:
+                      <HelpCircle className="w-4 h-4 text-slate-800 stroke-[2.5px]" /> WAITING FOR AMOUNT:
                     </>
                   )}
                 </span>
 
                 {parsed.isValid && (
                   <>
-                    <div className="flex items-center gap-1 text-xs font-semibold bg-white px-2 py-0.5 border border-gray-200 rounded-lg shadow-md">
+                    <div className="flex items-center gap-1 text-xs font-semibold bg-[#EAE5F8] text-[#554089] px-2 py-0.5 rounded-full rounded-2xl shadow-sm">
                       <Tag className="w-3 h-3 text-[#FF6B6B]" /> Category:{" "}
                       <span className="text-[#FF6B6B] uppercase">{parsed.category}</span>
                     </div>
 
-                    <div className="flex items-center gap-1 text-xs font-semibold bg-white px-2 py-0.5 border border-gray-200 rounded-lg shadow-md">
-                      <Store className="w-3 h-3 text-gray-900" /> Memo/Shop:{" "}
-                      <span className="text-gray-900">{parsed.shop}</span>
+                    <div className="flex items-center gap-1 text-xs font-semibold bg-[#EAE5F8] text-[#554089] px-2 py-0.5 rounded-full rounded-2xl shadow-sm">
+                      <Store className="w-3 h-3 text-slate-800" /> Memo/Shop:{" "}
+                      <span className="text-slate-800">{parsed.shop}</span>
                     </div>
 
-                    <div className="flex items-center gap-1 text-xs font-semibold bg-white px-2.5 py-0.5 border border-gray-200 rounded-lg shadow-md">
-                      <DollarSign className="w-3 h-3 text-gray-900" /> Amount:{" "}
-                      <span className="text-sm font-semibold text-gray-900">৳{formatBDT(parsed.amount_bdt)}</span>
+                    <div className="flex items-center gap-1 text-xs font-semibold bg-white px-2.5 py-0.5 rounded-2xl shadow-sm">
+                      <DollarSign className="w-3 h-3 text-slate-800" /> Amount:{" "}
+                      <span className="text-sm font-semibold text-slate-800">৳{formatBDT(parsed.amount_bdt)}</span>
                     </div>
                   </>
                 )}
               </div>
 
               {parsed.isValid && (
-                <span className="text-[11px] font-semibold uppercase bg-indigo-600 text-white px-2 py-0.5">
+                <span className="text-[11px] font-semibold uppercase bg-[#634E9F] text-white px-2 py-0.5">
                   Press Enter to Log
                 </span>
               )}
@@ -179,14 +179,14 @@ export const NotebookInput: React.FC = () => {
 
           {/* Success Toast */}
           {recentAdded && (
-            <div className="p-3 bg-white border border-gray-200 rounded-lg shadow-md flex items-center justify-between text-gray-900 animate-in fade-in slide-in-from-top-2">
+            <div className="p-3 bg-white rounded-2xl shadow-sm flex items-center justify-between text-slate-800 animate-in fade-in slide-in-from-top-2">
               <div className="flex items-center gap-2">
                 <CheckCircle2 className="w-5 h-5 stroke-[2.5px]" />
                 <span className="text-xs sm:text-sm font-semibold uppercase tracking-wide">
                   Logged: ৳{formatBDT(recentAdded.amount)} for {recentAdded.shop} ({recentAdded.category})
                 </span>
               </div>
-              <span className="text-[10px] font-semibold uppercase bg-indigo-600 text-white px-2 py-0.5">
+              <span className="text-[10px] font-semibold uppercase bg-[#634E9F] text-white px-2 py-0.5">
                 Saved to Ledger
               </span>
             </div>
@@ -195,8 +195,8 @@ export const NotebookInput: React.FC = () => {
 
         {/* Quick Shorthand Buttons / Chips */}
         <div className="mt-4 pt-4 border-t-2 border-dashed border-gray-200 flex flex-col gap-2">
-          <span className="text-[11px] font-semibold uppercase text-gray-900 flex items-center gap-1">
-            <Flame className="w-3 h-3 text-[#FF6B6B]" /> Popular Dhaka Shorthands (Click to try):
+          <span className="text-[11px] font-semibold uppercase text-slate-800 flex items-center gap-1">
+            <Flame className="w-3 h-3 text-[#FF6B6B]" /> Popular Shorthands (Click to try):
           </span>
           <div className="flex flex-wrap gap-2">
             {[
@@ -214,10 +214,10 @@ export const NotebookInput: React.FC = () => {
                 key={idx}
                 type="button"
                 onClick={() => handleQuickSuggestion(chip.label)}
-                className="text-xs font-mono font-semibold bg-white hover:bg-white active:translate-y-0.5 text-gray-900 px-2.5 py-1 border border-gray-200 rounded-lg shadow-md transition-colors flex items-center gap-1"
+                className="text-xs  font-semibold bg-white hover:bg-white active:translate-y-0.5 text-slate-800 px-2.5 py-1 rounded-2xl shadow-sm transition-colors flex items-center gap-1"
               >
                 <span className="text-[#FF6B6B] font-bold">»</span> {chip.label}
-                <span className="text-[10px] text-gray-900 font-sans">({chip.desc})</span>
+                <span className="text-[10px] text-slate-800 font-sans">({chip.desc})</span>
               </button>
             ))}
           </div>

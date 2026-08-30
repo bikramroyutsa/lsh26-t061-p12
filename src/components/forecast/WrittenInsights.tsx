@@ -37,7 +37,7 @@ export const WrittenInsights: React.FC = () => {
 
   return (
     <Card
-      variant="white"
+      variant="outline"
       shadow="md"
       header={
         <div className="flex items-center justify-between w-full">
@@ -45,7 +45,7 @@ export const WrittenInsights: React.FC = () => {
             <Sparkles className="w-5 h-5 stroke-[2.5px]" />
             <span>Dynamic Data-Grounded Written Insights</span>
           </div>
-          <Badge variant="mint" size="sm">
+          <Badge variant="primary" size="sm">
             {insights.length} CONCRETE INSIGHTS
           </Badge>
         </div>
@@ -56,26 +56,26 @@ export const WrittenInsights: React.FC = () => {
         {insights.map((insight) => (
           <div
             key={insight.id}
-            className={`border p-4 shadow-md flex items-start gap-3.5 ${getSeverityBg(
+            className={`border p-4 shadow-sm flex items-start gap-3.5 ${getSeverityBg(
               insight.severity
             )} hover:translate-x-0.5 transition-transform`}
           >
-            <div className="p-2 border border-gray-200 rounded-lg bg-white shadow-md mt-0.5">
+            <div className="p-2 rounded-2xl bg-white shadow-sm mt-0.5">
               {getSeverityIcon(insight.type, insight.severity)}
             </div>
 
             <div className="flex-1 flex flex-col gap-1">
               <div className="flex items-center justify-between flex-wrap gap-2">
-                <span className="font-semibold text-sm uppercase tracking-tight text-gray-900">
+                <span className="font-semibold text-sm uppercase tracking-tight text-slate-800">
                   {insight.title}
                 </span>
                 {insight.category && (
-                  <Badge variant="dark" size="sm">
+                  <Badge variant="primary" size="sm">
                     {insight.category}
                   </Badge>
                 )}
               </div>
-              <p className="text-xs font-bold text-gray-900 leading-relaxed">
+              <p className="text-xs font-bold text-slate-800 leading-relaxed">
                 {insight.message}
               </p>
             </div>

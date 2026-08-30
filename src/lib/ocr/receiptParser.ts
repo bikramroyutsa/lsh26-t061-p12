@@ -1,7 +1,7 @@
 import { OCRExtractionResult } from "@/types/ocr";
 
-// Known Dhaka merchants and their typical categories
-const DHAKA_SHOPS: Record<string, string> = {
+// Known merchants and their typical categories
+const LOCAL_SHOPS: Record<string, string> = {
   "meena bazar": "Groceries",
   "agora": "Groceries",
   "shwapno": "Groceries",
@@ -9,7 +9,7 @@ const DHAKA_SHOPS: Record<string, string> = {
   "aarong": "Shopping",
   "desco": "Utilities",
   "dpdc": "Utilities",
-  "dhaka wasa": "Utilities",
+  "wasa": "Utilities",
   "titas gas": "Utilities",
   "landlord": "Rent",
   "lazz pharma": "Health",
@@ -25,7 +25,7 @@ const DHAKA_SHOPS: Record<string, string> = {
   "madchef": "Food",
   "panda garden": "Food",
   "takeout": "Food",
-  "kfc dhaka": "Food",
+  "kfc": "Food",
   "sultan's dine": "Food",
   "kacchi bhai": "Food",
   "udemy": "Education",
@@ -35,7 +35,7 @@ const DHAKA_SHOPS: Record<string, string> = {
 };
 
 /**
- * Intelligent parser for simulated or extracted receipt text from Dhaka bills and memos.
+ * Intelligent parser for simulated or extracted receipt text from bills and memos.
  * Adheres strictly to the constraint:
  * "If the receipt reading is unsure about a field, show that clearly and let the user fix it. Never fill in an amount the app is not sure about."
  */
@@ -47,7 +47,7 @@ export function parseReceiptText(rawText: string): OCRExtractionResult {
   let detectedShop = "";
   let shopConfidence = 0.5;
 
-  for (const [shopName, _cat] of Object.entries(DHAKA_SHOPS)) {
+  for (const [shopName, _cat] of Object.entries(LOCAL_SHOPS)) {
     if (textLower.includes(shopName)) {
       // Capitalize proper name
       detectedShop = shopName
@@ -129,8 +129,8 @@ export function parseReceiptText(rawText: string): OCRExtractionResult {
 
   if (detectedShop) {
     const shopLower = detectedShop.toLowerCase();
-    if (DHAKA_SHOPS[shopLower]) {
-      detectedCategory = DHAKA_SHOPS[shopLower];
+    if (LOCAL_SHOPS[shopLower]) {
+      detectedCategory = LOCAL_SHOPS[shopLower];
       catConfidence = 0.95;
     }
   }
@@ -175,7 +175,7 @@ export const SAMPLE_RECEIPTS = [
   },
   {
     name: "DESCO Electricity Bill",
-    preview: "DHAKA ELECTRIC SUPPLY COMPANY (DESCO)\nBill Month: 2026-04\nIssue Date: 2026-04-05\nAccount: 10492841\nTotal Payable Amount: 856.50 BDT",
+    preview: "LOCAL ELECTRIC SUPPLY COMPANY (DESCO)\nBill Month: 2026-04\nIssue Date: 2026-04-05\nAccount: 10492841\nTotal Payable Amount: 856.50 BDT",
   },
   {
     name: "bKash GP Mobile Recharge",

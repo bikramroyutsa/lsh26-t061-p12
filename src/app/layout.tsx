@@ -5,8 +5,8 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "DHAKA LEDGER // Personal Financial Manager",
-  description: "Minimalist material personal ledger, expense forecaster, DPS calculator & savings pocket tracker.",
+  title: "LEDGY // Personal Financial Manager",
+  description: "Advanced Local State Financial Forecaster",
 };
 
 export default function RootLayout({

@@ -9,7 +9,7 @@ export interface ParsedExpenseInput {
   notes?: string;
 }
 
-// Category keyword matching rules (including common abbreviations like 'lun' for lunch, 'gro' for groceries, Dhaka-specific words)
+// Category keyword matching rules (including common abbreviations like 'lun' for lunch, 'gro' for groceries, App-specific words)
 const CATEGORY_KEYWORDS: Record<string, { category: ExpenseCategory; defaultShop: string }> = {
   // Food & Dining
   lun: { category: "Food", defaultShop: "Lunch" },
@@ -53,7 +53,7 @@ const CATEGORY_KEYWORDS: Record<string, { category: ExpenseCategory; defaultShop
   rick: { category: "Transport", defaultShop: "Rickshaw" },
   rickshaw: { category: "Transport", defaultShop: "Rickshaw" },
   bus: { category: "Transport", defaultShop: "Local Bus" },
-  metro: { category: "Transport", defaultShop: "Dhaka Metro Rail" },
+  metro: { category: "Transport", defaultShop: "Metro Rail" },
   train: { category: "Transport", defaultShop: "Railway" },
   fuel: { category: "Transport", defaultShop: "Petrol Pump" },
   petrol: { category: "Transport", defaultShop: "Filling Station" },
@@ -65,7 +65,7 @@ const CATEGORY_KEYWORDS: Record<string, { category: ExpenseCategory; defaultShop
   house: { category: "Rent", defaultShop: "House Rent" },
   desco: { category: "Utilities", defaultShop: "DESCO Electricity" },
   dpdc: { category: "Utilities", defaultShop: "DPDC Electricity" },
-  wasa: { category: "Utilities", defaultShop: "Dhaka WASA" },
+  wasa: { category: "Utilities", defaultShop: "WASA" },
   gas: { category: "Utilities", defaultShop: "Titas Gas" },
   electric: { category: "Utilities", defaultShop: "Electricity Bill" },
   electricity: { category: "Utilities", defaultShop: "Electricity Bill" },

@@ -66,7 +66,7 @@ export const CreatePocketModal: React.FC<CreatePocketModalProps> = ({
     >
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         {error && (
-          <div className="p-3 bg-white border border-[#FF6B6B] text-xs font-bold text-gray-900">
+          <div className="p-3 bg-white border border-[#FF6B6B] text-xs font-bold text-slate-800">
             ⚠️ {error}
           </div>
         )}
@@ -108,10 +108,10 @@ export const CreatePocketModal: React.FC<CreatePocketModalProps> = ({
         </div>
 
         <div className="pt-2 flex justify-end gap-2">
-          <Button type="button" variant="white" onClick={onClose}>
+          <Button type="button" variant="outline" onClick={onClose}>
             Cancel
           </Button>
-          <Button type="submit" variant="secondary" icon={<Plus className="w-4 h-4" />}>
+          <Button type="submit" variant="secondary" >
             Create Pocket
           </Button>
         </div>

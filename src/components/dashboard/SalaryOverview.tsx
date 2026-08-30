@@ -26,7 +26,7 @@ export const SalaryOverview: React.FC = () => {
 
   return (
     <Card
-      variant="white"
+      variant="outline"
       shadow="md"
       header={
         <div className="flex items-center justify-between w-full">
@@ -34,7 +34,7 @@ export const SalaryOverview: React.FC = () => {
             <Wallet className="w-5 h-5 stroke-[2.5px]" />
             <span>Monthly Cashflow & Salary Tracker</span>
           </div>
-          <Badge variant="dark" size="sm">
+          <Badge variant="primary" size="sm">
             {selectedMonth}
           </Badge>
         </div>
@@ -43,8 +43,8 @@ export const SalaryOverview: React.FC = () => {
     >
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
         {/* 1. Salary Field */}
-        <div className="border border-gray-200 rounded-lg p-4 bg-white shadow-md flex flex-col gap-2">
-          <span className="text-xs font-semibold uppercase text-gray-900 tracking-wider">
+        <div className="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] p-6 sm:p-8 flex flex-col gap-2">
+          <span className="text-xs font-semibold uppercase text-slate-800 tracking-wider">
             Monthly Salary (BDT)
           </span>
           {isEditingSalary ? (
@@ -53,16 +53,16 @@ export const SalaryOverview: React.FC = () => {
                 type="number"
                 value={tempSalary}
                 onChange={(e) => setTempSalary(e.target.value)}
-                className="w-full font-semibold text-xl border border-gray-200 rounded-lg px-2 py-1 bg-white outline-none"
+                className="w-full font-semibold text-xl rounded-2xl px-2 py-1 bg-white outline-none"
                 autoFocus
               />
-              <Button size="sm" variant="mint" onClick={handleSaveSalary}>
+              <Button size="sm" variant="primary" onClick={handleSaveSalary}>
                 <Check className="w-4 h-4 stroke-[3px]" />
               </Button>
             </div>
           ) : (
             <div className="flex items-center justify-between">
-              <span className="text-2xl font-semibold text-gray-900">
+              <span className="text-2xl font-semibold text-slate-800">
                 ৳{salary.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
               </span>
               <button
@@ -70,7 +70,7 @@ export const SalaryOverview: React.FC = () => {
                   setTempSalary(salary.toString());
                   setIsEditingSalary(true);
                 }}
-                className="p-1.5 border border-gray-200 rounded-lg bg-white hover:bg-white shadow-md active:translate-x-0.5 active:translate-y-0.5 transition-all"
+                className="p-1.5 rounded-2xl bg-white hover:bg-white shadow-sm active:translate-x-0.5 active:translate-y-0.5 transition-all"
                 title="Edit Salary"
               >
                 <Edit2 className="w-3.5 h-3.5 stroke-[2.5px]" />
@@ -80,12 +80,12 @@ export const SalaryOverview: React.FC = () => {
         </div>
 
         {/* 2. Total Spent So Far */}
-        <div className="border border-gray-200 rounded-lg p-4 bg-white shadow-md flex flex-col gap-2">
+        <div className="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] p-6 sm:p-8 flex flex-col gap-2">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold uppercase text-gray-900 tracking-wider">
+            <span className="text-xs font-semibold uppercase text-slate-800 tracking-wider">
               Total Spent So Far
             </span>
-            <Badge variant="accent" size="sm">
+            <Badge variant="primary" size="sm">
               {spentPercent.toFixed(1)}% of Salary
             </Badge>
           </div>
@@ -96,16 +96,16 @@ export const SalaryOverview: React.FC = () => {
 
         {/* 3. Current In-Hand Balance */}
         <div
-          className={`border border-gray-200 rounded-lg p-4 shadow-md flex flex-col gap-2 ${
+          className={`rounded-2xl p-4 shadow-sm flex flex-col gap-2 ${
             netBalance >= 0 ? "bg-white" : "bg-white"
           }`}
         >
-          <span className="text-xs font-semibold uppercase text-gray-900 tracking-wider">
+          <span className="text-xs font-semibold uppercase text-slate-800 tracking-wider">
             Current Balance (In-Hand)
           </span>
           <span
             className={`text-2xl font-semibold ${
-              netBalance >= 0 ? "text-gray-900" : "text-[#FF6B6B]"
+              netBalance >= 0 ? "text-slate-800" : "text-[#FF6B6B]"
             }`}
           >
             ৳{netBalance.toLocaleString("en-IN", { minimumFractionDigits: 2 })}

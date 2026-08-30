@@ -43,152 +43,89 @@ export const Navbar: React.FC<NavbarProps> = ({
     months,
   } = useLedger();
 
-  const navItems: { id: NavTab; label: string; icon: React.ReactNode; color: string }[] = [
-    {
-      id: "notebook",
-      label: "📓 Notebook",
-      icon: <BookOpen className="w-4 h-4" />,
-      color: "bg-white",
-    },
-    {
-      id: "dashboard",
-      label: "📊 Dashboard",
-      icon: <LayoutDashboard className="w-4 h-4" />,
-      color: "bg-white",
-    },
-    {
-      id: "history",
-      label: "📜 History",
-      icon: <Receipt className="w-4 h-4" />,
-      color: "bg-white",
-    },
-    {
-      id: "pockets",
-      label: "🎯 Pockets & DPS",
-      icon: <Target className="w-4 h-4" />,
-      color: "bg-white",
-    },
-    {
-      id: "insights",
-      label: "🔮 Insights",
-      icon: <Sparkles className="w-4 h-4" />,
-      color: "bg-white",
-    },
+  const navItems: { id: NavTab; label: string }[] = [
+    { id: "notebook", label: "Notebook" },
+    { id: "dashboard", label: "Dashboard" },
+    { id: "history", label: "History" },
+    { id: "pockets", label: "Pockets & DPS" },
+    { id: "insights", label: "Insights" },
   ];
 
   return (
-    <header className="w-full bg-white border-gray-200 shadow-md sticky top-0 z-40">
-      {/* Top Banner: Brand, Context info, and Case selector */}
-      <div className="border-gray-200 px-4 sm:px-8 py-3 bg-white">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-3">
-          {/* Brand & Team Badge */}
-          <div className="flex items-center gap-2.5 flex-wrap">
-            <div className="bg-white border border-gray-200 rounded-lg px-3 py-1 shadow-md flex items-center gap-2">
-              <span className="font-semibold text-lg tracking-tight uppercase text-gray-900">
-                DHAKA LEDGER
-              </span>
-              <span className="text-[10px] font-semibold bg-indigo-600 text-white px-1.5 py-0.5 uppercase">
-                P12
-              </span>
-            </div>
-            <Badge variant="accent" size="sm">
-              LSH26-T061
-            </Badge>
-          </div>
-
-          {/* Controls: Month toggle, Date indicator & Benchmark case switcher */}
-          <div className="flex items-center gap-2.5 flex-wrap justify-center">
-            {/* Active Month Toggle */}
-            <div className="flex items-center border border-gray-200 rounded-lg bg-white shadow-md">
-              <button
-                onClick={() => setSelectedMonth(months.last)}
-                className={`px-2.5 py-0.5 text-xs font-semibold uppercase transition-colors ${
-                  selectedMonth === months.last
-                    ? "bg-white text-gray-900"
-                    : "bg-white text-gray-900 hover:bg-gray-100"
-                }`}
-              >
-                {months.last}
-              </button>
-              <div className="w-[2px] bg-indigo-600 h-full" />
-              <button
-                onClick={() => setSelectedMonth(months.this)}
-                className={`px-2.5 py-0.5 text-xs font-semibold uppercase transition-colors ${
-                  selectedMonth === months.this
-                    ? "bg-white text-gray-900"
-                    : "bg-white text-gray-900 hover:bg-gray-100"
-                }`}
-              >
-                {months.this}
-              </button>
-            </div>
-
-            {/* Today's Date */}
-            <div className="bg-white border border-gray-200 rounded-lg px-2.5 py-0.5 text-xs font-semibold shadow-md flex items-center gap-1.5">
-              <Calendar className="w-3.5 h-3.5" />
-              <span className="text-gray-900 uppercase text-[10px]">Date:</span>
-              <span>{todayDate}</span>
-            </div>
-
-            {/* Benchmark Case Selector */}
-            <div className="flex items-center gap-1 bg-white border border-gray-200 rounded-lg px-2 py-0.5 shadow-md">
-              <span className="text-[10px] font-semibold uppercase text-gray-900">Case:</span>
-              <select
-                value={activeCaseId}
-                onChange={(e) => loadCase(e.target.value)}
-                className="font-semibold text-xs bg-transparent border-none outline-none cursor-pointer text-gray-900"
-              >
-                {availableCases.map((c) => (
-                  <option key={c.case_id} value={c.case_id}>
-                    {c.case_id} ({c.months.this})
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-
-          {/* Quick Action Buttons */}
-          <div className="flex items-center gap-2">
-            <Button
-              variant="accent"
-              size="sm"
-              onClick={onOpenOCR}
-              icon={<Camera className="w-3.5 h-3.5 stroke-[3px]" />}
-            >
-              Scan Receipt
-            </Button>
-            <Button
-              variant="cyan"
-              size="sm"
-              onClick={onOpenWhatIf}
-              icon={<Sliders className="w-3.5 h-3.5" />}
-            >
-              What-If
-            </Button>
-          </div>
+    <header className="w-full bg-white border-b border-gray-100 shadow-sm sticky top-0 z-40">
+      <div className="max-w-7xl mx-auto px-4 sm:px-8 py-4 flex items-center justify-between gap-4 overflow-x-auto no-scrollbar">
+        
+        {/* Brand / Logo */}
+        <div className="flex-shrink-0 flex items-center gap-2 cursor-pointer">
+          <span className="font-semibold text-xl tracking-tight text-slate-800">
+            Ledgy
+          </span>
         </div>
-      </div>
 
-      {/* Primary Navigation Tabs */}
-      <div className="px-4 sm:px-8 bg-white">
-        <div className="max-w-7xl mx-auto flex items-center gap-2 overflow-x-auto py-2 no-scrollbar">
+        {/* Center Navigation Links */}
+        <nav className="flex-shrink-0 flex items-center gap-6">
           {navItems.map((item) => {
             const isActive = activeTab === item.id;
             return (
               <button
                 key={item.id}
                 onClick={() => onSelectTab(item.id)}
-                className={`px-4 py-2 text-xs sm:text-sm font-semibold text-sm text-gray-500 border border-gray-200 rounded-lg whitespace-nowrap transition-all flex items-center gap-2 ${
-                  isActive
-                    ? `${item.color} shadow-md translate-y-[-2px]`
-                    : "bg-white text-gray-900 hover:bg-white shadow-md"
+                className={`text-[15px] font-medium whitespace-nowrap transition-colors ${
+                  isActive ? "text-slate-800 font-semibold" : "text-gray-500 hover:text-slate-800"
                 }`}
               >
-                {item.icon}
-                <span>{item.label}</span>
+                {item.label}
               </button>
             );
           })}
+        </nav>
+
+        {/* Right Section: Compact Controls & Action Buttons */}
+        <div className="flex-shrink-0 flex items-center gap-4">
+          
+          {/* Compact Case & Month Controls */}
+          <div className="hidden lg:flex items-center gap-3 text-xs border-none rounded-full px-3 py-1.5 bg-gray-50">
+            <select
+              value={activeCaseId}
+              onChange={(e) => loadCase(e.target.value)}
+              className="bg-transparent border-none outline-none cursor-pointer text-gray-700 font-semibold w-16"
+            >
+              {availableCases.map((c) => (
+                <option key={c.case_id} value={c.case_id}>
+                  {c.case_id}
+                </option>
+              ))}
+            </select>
+            <div className="w-[1px] h-4 bg-gray-300" />
+            <button
+              onClick={() => setSelectedMonth(months.last)}
+              className={selectedMonth === months.last ? "text-[#634E9F] font-bold" : "text-gray-500 hover:text-slate-800"}
+            >
+              {months.last.substring(0, 3)}
+            </button>
+            <span className="text-gray-300">/</span>
+            <button
+              onClick={() => setSelectedMonth(months.this)}
+              className={selectedMonth === months.this ? "text-[#634E9F] font-bold" : "text-gray-500 hover:text-slate-800"}
+            >
+              {months.this.substring(0, 3)}
+            </button>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <button
+              onClick={onOpenOCR}
+              className="px-6 py-2.5 min-w-[140px] text-center bg-[#EAE5F8] text-[#554089] font-medium text-sm rounded-full hover:bg-[#DDD3F3] transition-colors"
+            >
+              Scan Receipt
+            </button>
+            <button
+              onClick={onOpenWhatIf}
+              className="px-6 py-2.5 min-w-[140px] text-center bg-[#634E9F] text-white font-medium text-sm rounded-full hover:bg-[#524083] transition-colors"
+            >
+              What-If
+            </button>
+          </div>
         </div>
       </div>
     </header>

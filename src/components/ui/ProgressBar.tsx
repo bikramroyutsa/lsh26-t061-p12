@@ -2,14 +2,14 @@ import React from 'react';
 
 export interface ProgressBarProps {
   progress: number; // 0 to 100
-  color?: string; // Tailwind color class e.g., 'bg-indigo-600'
+  color?: string; // Tailwind color class e.g., 'bg-[#634E9F]'
   height?: string;
   className?: string;
 }
 
 export const ProgressBar: React.FC<ProgressBarProps> = ({ 
   progress, 
-  color = 'bg-indigo-600', 
+  color = 'bg-[#634E9F]', 
   height = 'h-2',
   className = ''
 }) => {

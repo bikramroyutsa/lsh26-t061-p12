@@ -62,7 +62,7 @@ export const AddExpenseModal: React.FC<AddExpenseModalProps> = ({
     >
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         {error && (
-          <div className="p-3 bg-white border border-[#FF6B6B] text-xs font-bold text-gray-900">
+          <div className="p-3 bg-white border border-[#FF6B6B] text-xs font-bold text-slate-800">
             ⚠️ {error}
           </div>
         )}
@@ -77,13 +77,13 @@ export const AddExpenseModal: React.FC<AddExpenseModalProps> = ({
           />
 
           <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-semibold text-sm text-gray-500 text-gray-900">
+            <label className="text-xs font-semibold text-sm text-gray-500 text-slate-800">
               Category
             </label>
             <select
               value={category}
               onChange={(e) => setCategory(e.target.value)}
-              className="w-full bg-white border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500 font-bold text-sm"
+              className="w-full bg-white border-none rounded-full bg-[#F6F5FB] px-4 py-2 focus:ring-2 focus:ring-indigo-500 font-bold text-sm"
             >
               <option value="Food">Food</option>
               <option value="Groceries">Groceries</option>
@@ -128,10 +128,10 @@ export const AddExpenseModal: React.FC<AddExpenseModalProps> = ({
         />
 
         <div className="pt-2 flex justify-end gap-2">
-          <Button type="button" variant="white" onClick={onClose}>
+          <Button type="button" variant="outline" onClick={onClose}>
             Cancel
           </Button>
-          <Button type="submit" variant="secondary" icon={<Plus className="w-4 h-4" />}>
+          <Button type="submit" variant="secondary" >
             Record Expense
           </Button>
         </div>
