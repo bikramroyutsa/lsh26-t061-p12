@@ -11,12 +11,14 @@ import { LargestExpenses } from "@/components/dashboard/LargestExpenses";
 import { MonthlyComparison } from "@/components/dashboard/MonthlyComparison";
 import { ForecastCard } from "@/components/forecast/ForecastCard";
 import { WrittenInsights } from "@/components/forecast/WrittenInsights";
+import { BasicSummary } from "@/components/forecast/BasicSummary";
 import { PocketList } from "@/components/pockets/PocketList";
 import { ExpenseTable } from "@/components/expenses/ExpenseTable";
 import { AddExpenseModal } from "@/components/expenses/AddExpenseModal";
 import { ReceiptUploadModal } from "@/components/ocr/ReceiptUploadModal";
 import { WhatIfSimulator } from "@/components/simulator/WhatIfSimulator";
 import { OnboardingModal } from "@/components/onboarding/OnboardingModal";
+import { ChatWidget } from "@/components/chat/ChatWidget";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import {
@@ -151,26 +153,7 @@ function LedgerAppContent() {
           <div className="flex flex-col gap-8 animate-in fade-in duration-200">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <WrittenInsights />
-              <div className="border border-gray-200 rounded-lg bg-white p-6 shadow-md flex flex-col justify-between gap-6">
-                <div>
-                  <div className="flex items-center gap-2 mb-2">
-                    <Sliders className="w-5 h-5" />
-                    <h2 className="text-xl font-semibold uppercase text-gray-900">
-                      "What-If" Category Optimization
-                    </h2>
-                  </div>
-                  <p className="text-xs font-bold text-gray-900 mb-4">
-                    Simulate spending cuts on any category and immediately visualize impacts on month-end surplus and savings pocket timelines.
-                  </p>
-                </div>
-                <Button
-                  variant="primary"
-                  size="lg"
-                  onClick={() => setIsWhatIfOpen(true)}
-                >
-                  <Sliders className="w-5 h-5 mr-2" /> Open Category Cut Simulator
-                </Button>
-              </div>
+              <BasicSummary />
             </div>
           </div>
         )}
@@ -211,6 +194,8 @@ function LedgerAppContent() {
         isOpen={isWhatIfOpen}
         onClose={() => setIsWhatIfOpen(false)}
       />
+
+      <ChatWidget />
     </div>
   );
 }

@@ -4,10 +4,53 @@ import React from "react";
 import { useLedger } from "@/context/LedgerContext";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
-import { Sparkles, AlertCircle, TrendingUp, CheckCircle2, Repeat, Target } from "lucide-react";
+import { Sparkles, AlertCircle, TrendingUp, CheckCircle2, Bot, Loader2 } from "lucide-react";
+import { Button } from "@/components/ui/Button";
 
 export const WrittenInsights: React.FC = () => {
-  const { insights } = useLedger();
+  const { salary, expenses, pockets, forecast, momComparison, insights } = useLedger();
+  const [aiInsight, setAiInsight] = React.useState<string | null>(null);
+  const [isAskingAi, setIsAskingAi] = React.useState(false);
+
+  const handleAskAi = async () => {
+    setIsAskingAi(true);
+    setAiInsight(null);
+    try {
+      const contextData = {
+        salary,
+        forecast: {
+          spent: forecast.current_spent_bdt,
+          projectedRestOfMonth: forecast.projected_remaining_spend_bdt,
+          expectedMonthEndSurplus: forecast.projected_net_savings_bdt,
+          isDeficit: forecast.is_deficit
+        },
+        mom: {
+          lastMonthSpent: momComparison.last_month_spent_bdt,
+          thisMonthSpent: momComparison.this_month_spent_bdt,
+          deltaPercentage: momComparison.delta_percentage
+        },
+        expensesSummary: expenses.slice(0, 20).map(e => ({ amount: e.amount_bdt, category: e.category, shop: e.shop, date: e.date })),
+        pockets: pockets.map(p => ({ name: p.name, target: p.target_bdt, monthly: p.monthly_contribution_bdt })),
+      };
+
+      const res = await fetch("/api/advisor", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ contextData })
+      });
+      
+      const data = await res.json();
+      if (data.insight) {
+        setAiInsight(data.insight);
+      } else {
+        setAiInsight("AI Advisor is currently unavailable. Please check your API keys.");
+      }
+    } catch (err) {
+      setAiInsight("Failed to reach the AI Advisor.");
+    } finally {
+      setIsAskingAi(false);
+    }
+  };
 
   const getSeverityIcon = (type: string, severity: string) => {
     switch (severity) {
@@ -45,9 +88,15 @@ export const WrittenInsights: React.FC = () => {
             <Sparkles className="w-5 h-5 stroke-[2.5px]" />
             <span>Dynamic Data-Grounded Written Insights</span>
           </div>
-          <Badge variant="primary" size="sm">
-            {insights.length} CONCRETE INSIGHTS
-          </Badge>
+          <div className="flex items-center gap-2">
+            <Button size="sm" variant="secondary" onClick={handleAskAi} disabled={isAskingAi} className="bg-white/80 hover:bg-white text-[#634E9F] font-bold">
+              {isAskingAi ? <Loader2 className="w-4 h-4 mr-1.5 animate-spin" /> : <Bot className="w-4 h-4 mr-1.5" />}
+              {isAskingAi ? "Thinking..." : "Ask AI Advisor"}
+            </Button>
+            <Badge variant="primary" size="sm">
+              {insights.length} CONCRETE INSIGHTS
+            </Badge>
+          </div>
         </div>
       }
       headerBg="mint"
@@ -81,6 +130,22 @@ export const WrittenInsights: React.FC = () => {
             </div>
           </div>
         ))}
+
+        {aiInsight && (
+          <div className="mt-2 border border-purple-200 p-5 shadow-md flex items-start gap-4 bg-purple-50/50 rounded-2xl animate-in fade-in zoom-in-95 duration-300">
+            <div className="p-2.5 rounded-full bg-[#634E9F] shadow-sm text-white flex-shrink-0">
+              <Bot className="w-5 h-5" />
+            </div>
+            <div className="flex-1 flex flex-col gap-2">
+              <div className="font-bold text-sm uppercase tracking-tight text-[#634E9F]">
+                AI Advisor Insights
+              </div>
+              <div className="text-[13px] font-semibold text-slate-700 leading-relaxed space-y-2 whitespace-pre-wrap">
+                {aiInsight}
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </Card>
   );
