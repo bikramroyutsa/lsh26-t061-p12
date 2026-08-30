@@ -16,10 +16,13 @@ import {
   Store,
   DollarSign,
   Calendar,
+  Settings,
 } from "lucide-react";
+import { ManageShorthandsModal } from "./ManageShorthandsModal";
 
 export const NotebookInput: React.FC = () => {
-  const { addExpense, todayDate } = useLedger();
+  const { addExpense, todayDate, shorthands } = useLedger();
+  const [isManageModalOpen, setIsManageModalOpen] = useState(false);
   const [inputVal, setInputVal] = useState("");
   const [parsed, setParsed] = useState<ParsedExpenseInput | null>(null);
   const [recentAdded, setRecentAdded] = useState<{
@@ -31,7 +34,7 @@ export const NotebookInput: React.FC = () => {
 
   useEffect(() => {
     if (inputVal.trim()) {
-      setParsed(parseShorthandExpense(inputVal));
+      setParsed(parseShorthandExpense(inputVal, shorthands));
     } else {
       setParsed(null);
     }
@@ -72,7 +75,7 @@ export const NotebookInput: React.FC = () => {
   return (
     <div className="flex flex-col gap-4">
       {/* Main Notebook Input Box */}
-      <div className="rounded-2xl bg-white p-6 sm:p-8 shadow-sm relative overflow-hidden">
+      <div className="rounded-2xl bg-[#FEFCE8] border border-[#FDE047] p-6 sm:p-8 shadow-sm relative overflow-hidden">
         {/* Top Header Row with Date Badge & Title */}
         <div className="flex items-center justify-between flex-wrap gap-3 mb-4">
           <div className="flex items-center gap-2">
@@ -195,34 +198,37 @@ export const NotebookInput: React.FC = () => {
 
         {/* Quick Shorthand Buttons / Chips */}
         <div className="mt-4 pt-4 border-t-2 border-dashed border-gray-200 flex flex-col gap-2">
-          <span className="text-[11px] font-semibold uppercase text-slate-800 flex items-center gap-1">
-            <Flame className="w-3 h-3 text-[#FF6B6B]" /> Popular Shorthands (Click to try):
-          </span>
-          <div className="flex flex-wrap gap-2">
-            {[
-              { label: "lun 500", desc: "Lunch (৳500)" },
-              { label: "dinner 650", desc: "Dinner (৳650)" },
-              { label: "rickshaw 60", desc: "Rickshaw (৳60)" },
-              { label: "uber 250", desc: "Uber (৳250)" },
-              { label: "agora 1450", desc: "Agora (৳1,450)" },
-              { label: "cha 20", desc: "Tong Tea (৳20)" },
-              { label: "desco 2800", desc: "DESCO Bill (৳2,800)" },
-              { label: "gp 300", desc: "GP Recharge (৳300)" },
-              { label: "med 420", desc: "Medicine (৳420)" },
-            ].map((chip, idx) => (
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] font-semibold uppercase text-slate-800 flex items-center gap-1">
+              <Flame className="w-3 h-3 text-[#FF6B6B]" /> Your Shorthands (Click to try):
+            </span>
+            <button
+              onClick={() => setIsManageModalOpen(true)}
+              className="text-[10px] font-bold uppercase flex items-center gap-1.5 bg-[#634E9F] text-white px-3 py-1.5 rounded-full hover:bg-[#554089] transition-colors shadow-sm"
+            >
+              <Settings className="w-3 h-3" /> Manage Commands
+            </button>
+          </div>
+          <div className="flex flex-wrap gap-2 max-h-48 overflow-y-auto pr-2 pb-2">
+            {shorthands.map((sh) => (
               <button
-                key={idx}
+                key={sh.id}
                 type="button"
-                onClick={() => handleQuickSuggestion(chip.label)}
-                className="text-xs  font-semibold bg-white hover:bg-white active:translate-y-0.5 text-slate-800 px-2.5 py-1 rounded-2xl shadow-sm transition-colors flex items-center gap-1"
+                onClick={() => handleQuickSuggestion(`${sh.keyword} 500`)}
+                className="text-xs font-semibold bg-white hover:bg-gray-50 active:translate-y-0.5 text-slate-800 px-2.5 py-1 rounded-2xl shadow-sm border border-gray-100 transition-colors flex items-center gap-1"
               >
-                <span className="text-[#FF6B6B] font-bold">»</span> {chip.label}
-                <span className="text-[10px] text-slate-800 font-sans">({chip.desc})</span>
+                <span className="text-[#FF6B6B] font-bold">»</span> {sh.keyword} 500
+                <span className="text-[10px] text-slate-500 font-sans">({sh.shop})</span>
               </button>
             ))}
           </div>
         </div>
       </div>
+
+      <ManageShorthandsModal 
+        isOpen={isManageModalOpen} 
+        onClose={() => setIsManageModalOpen(false)} 
+      />
     </div>
   );
 };

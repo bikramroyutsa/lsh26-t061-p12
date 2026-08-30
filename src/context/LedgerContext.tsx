@@ -1,7 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useState, useMemo, useEffect } from "react";
-import { Expense, MoMComparison, CategoryBreakdownItem } from "@/types/expense";
+import { Expense, MoMComparison, CategoryBreakdownItem, ShorthandCommand } from "@/types/expense";
 import { SavingsPocket, DPSCalculationResult } from "@/types/pocket";
 import { ForecastResult } from "@/types/forecast";
 import { ConcreteInsight } from "@/types/insights";
@@ -21,6 +21,7 @@ interface LedgerContextType {
   salary: number;
   expenses: Expense[];
   pockets: SavingsPocket[];
+  shorthands: ShorthandCommand[];
   todayDate: string;
   months: { last: string; this: string };
   selectedMonth: string;
@@ -56,6 +57,8 @@ interface LedgerContextType {
   updatePocketContribution: (id: string, contribution: number) => void;
   deletePocket: (id: string) => void;
   setWhatIf: (category: string, cutPercent: number) => void;
+  addShorthand: (command: Omit<ShorthandCommand, "id">) => void;
+  deleteShorthand: (id: string) => void;
 }
 
 const LedgerContext = createContext<LedgerContextType | undefined>(undefined);
@@ -67,10 +70,15 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const initialCase = availableCases[0];
   const initialParsed = initialCase ? parseCaseData(initialCase) : null;
 
-  const [activeCaseId, setActiveCaseId] = useState<string>(initialCase?.case_id || "PUB-01");
-  const [salary, setSalary] = useState<number>(initialParsed?.salary || 50000);
-  const [expenses, setExpenses] = useState<Expense[]>(initialParsed?.expenses || []);
-  const [pockets, setPockets] = useState<SavingsPocket[]>(initialParsed?.pockets || []);
+  const [activeCaseId, setActiveCaseId] = useState<string>("");
+  const [salary, setSalary] = useState<number>(0);
+  const [expenses, setExpenses] = useState<Expense[]>([]);
+  const [pockets, setPockets] = useState<SavingsPocket[]>([]);
+  const [shorthands, setShorthands] = useState<ShorthandCommand[]>([
+    { id: "sh-1", keyword: "lun", category: "Food", shop: "Lunch" },
+    { id: "sh-2", keyword: "uber", category: "Transport", shop: "Uber" },
+    { id: "sh-3", keyword: "gro", category: "Groceries", shop: "Local Grocery" },
+  ]);
   const [todayDate, setTodayDate] = useState<string>(initialParsed?.today || "2026-04-17");
   const [months, setMonths] = useState<{ last: string; this: string }>(
     initialParsed?.months || { last: "2026-03", this: "2026-04" }
@@ -255,6 +263,15 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     setWhatIfCutPercent(cutPercent);
   };
 
+  const addShorthand = (command: Omit<ShorthandCommand, "id">) => {
+    const id = `sh-${Date.now()}`;
+    setShorthands((prev) => [...prev, { ...command, id }]);
+  };
+
+  const deleteShorthand = (id: string) => {
+    setShorthands((prev) => prev.filter((sh) => sh.id !== id));
+  };
+
   return (
     <LedgerContext.Provider
       value={{
@@ -263,6 +280,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         salary,
         expenses,
         pockets,
+        shorthands,
         todayDate,
         months,
         selectedMonth,
@@ -289,6 +307,8 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         updatePocketContribution,
         deletePocket,
         setWhatIf,
+        addShorthand,
+        deleteShorthand,
       }}
     >
       {children}
