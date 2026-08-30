@@ -1,0 +1,144 @@
+"use client";
+
+import React, { useState } from "react";
+import { useLedger } from "@/context/LedgerContext";
+import { SavingsPocket, DPSCalculationResult } from "@/types/pocket";
+import { Card } from "@/components/ui/Card";
+import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
+import { Slider } from "@/components/ui/Slider";
+import { DPSBreakdownModal } from "./DPSBreakdownModal";
+import { Target, Calendar, Landmark, Trash2 } from "lucide-react";
+
+interface PocketCardProps {
+  pocket: SavingsPocket & {
+    calculatedCompletionDate: string;
+    calculatedMonths: number;
+    isSurplusConstrained: boolean;
+    dpsResult: DPSCalculationResult;
+  };
+}
+
+export const PocketCard: React.FC<PocketCardProps> = ({ pocket }) => {
+  const { updatePocketContribution, deletePocket, dpsRule } = useLedger();
+  const [isDPSModalOpen, setIsDPSModalOpen] = useState(false);
+
+  return (
+    <>
+      <Card
+        variant="white"
+        shadow="md"
+        hoverLift
+        header={
+          <div className="flex items-center justify-between w-full">
+            <div className="flex items-center gap-2">
+              <Target className="w-5 h-5 stroke-[2.5px]" />
+              <span>{pocket.name}</span>
+            </div>
+            <Badge variant="dark" size="sm">
+              {pocket.item}
+            </Badge>
+          </div>
+        }
+        headerBg="secondary"
+      >
+        <div className="flex flex-col gap-4">
+          {/* Target & Forecast Completion Banner */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="border-2 border-black p-3 bg-[#FFFDF5] shadow-neo-xs flex flex-col gap-0.5">
+              <span className="text-[10px] font-black uppercase text-black/60">
+                Target Amount (BDT)
+              </span>
+              <span className="text-xl font-black text-black">
+                ৳{pocket.target_bdt.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
+              </span>
+            </div>
+
+            <div
+              className={`border-2 border-black p-3 shadow-neo-xs flex flex-col gap-0.5 ${
+                pocket.isSurplusConstrained ? "bg-[#FFD93D]/30" : "bg-[#00F0B5]/25"
+              }`}
+            >
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-black uppercase text-black/60 flex items-center gap-1">
+                  <Calendar className="w-3 h-3" /> Forecast Target Date
+                </span>
+                {pocket.isSurplusConstrained && (
+                  <span className="text-[9px] font-black bg-[#FF6B6B] text-black px-1 border border-black">
+                    Constrained
+                  </span>
+                )}
+              </div>
+              <span className="text-xl font-black text-black">
+                {pocket.calculatedCompletionDate}
+              </span>
+              <span className="text-[10px] font-bold text-black/60">
+                {pocket.calculatedMonths < 900
+                  ? `~${pocket.calculatedMonths} months runway`
+                  : "Requires higher surplus"}
+              </span>
+            </div>
+          </div>
+
+          {/* Interactive Monthly Contribution Slider (Bonus 1) */}
+          <div className="border-3 border-black p-3.5 bg-[#FFFDF5] shadow-neo-xs flex flex-col gap-2">
+            <Slider
+              label="Monthly Contribution (Live Slider)"
+              value={pocket.monthly_contribution_bdt}
+              min={0}
+              max={Math.max(50000, pocket.target_bdt)}
+              step={500}
+              valueFormatter={(v) => `৳${v.toLocaleString("en-IN")}/mo`}
+              onChange={(newVal) => updatePocketContribution(pocket.id, newVal)}
+              helperText="Drag slider to instantly shift completion date"
+            />
+          </div>
+
+          {/* DPS Return Teaser & Compound Details Button */}
+          <div className="border-2 border-black p-3 bg-white shadow-neo-xs flex items-center justify-between flex-wrap gap-2">
+            <div className="flex items-center gap-2">
+              <div className="p-1.5 bg-[#FFD93D] border-2 border-black shadow-neo-xs">
+                <Landmark className="w-4 h-4" />
+              </div>
+              <div>
+                <span className="block text-[10px] font-black uppercase text-black/60">
+                  DPS Compound Yield ({pocket.dpsResult.annual_rate_percent}% p.a.)
+                </span>
+                <span className="font-black text-sm text-[#00B894]">
+                  +৳{pocket.dpsResult.total_interest_earned_bdt.toLocaleString("en-IN", { minimumFractionDigits: 2 })} interest
+                </span>
+              </div>
+            </div>
+
+            <Button
+              variant="muted"
+              size="sm"
+              onClick={() => setIsDPSModalOpen(true)}
+            >
+              DPS Table
+            </Button>
+          </div>
+
+          {/* Delete Button */}
+          <div className="flex justify-end pt-1">
+            <button
+              onClick={() => deletePocket(pocket.id)}
+              className="text-xs font-bold text-[#FF6B6B] hover:text-black hover:underline flex items-center gap-1"
+            >
+              <Trash2 className="w-3.5 h-3.5" /> Remove Pocket
+            </button>
+          </div>
+        </div>
+      </Card>
+
+      <DPSBreakdownModal
+        isOpen={isDPSModalOpen}
+        onClose={() => setIsDPSModalOpen(false)}
+        pocketName={pocket.name}
+        itemName={pocket.item}
+        dpsResult={pocket.dpsResult}
+        dpsRule={dpsRule}
+      />
+    </>
+  );
+};

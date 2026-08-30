@@ -1,49 +1,237 @@
+@import 'tailwindcss';
+
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+  --neo-bg: #FFFDF5;
+  --neo-black: #000000;
+  --neo-accent: #FF6B6B;
+  --neo-secondary: #FFD93D;
+  --neo-muted: #C4B5FD;
+  --neo-white: #FFFFFF;
+  --neo-cyan: #00E5FF;
+  --neo-mint: #00F0B5;
+  --neo-orange: #FF9F1C;
+  --neo-pink: #FF70A6;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
-html {
-  height: 100%;
-}
-
-html,
-body {
-  max-width: 100vw;
-  overflow-x: hidden;
-}
-
-body {
-  min-height: 100%;
-  display: flex;
-  flex-direction: column;
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  --font-space-grotesk: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
 * {
   box-sizing: border-box;
-  padding: 0;
   margin: 0;
+  padding: 0;
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
+html, body {
+  min-height: 100vh;
+  background-color: var(--neo-bg);
+  color: var(--neo-black);
+  font-family: var(--font-space-grotesk);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
+/* Halftone and Grid Background Textures */
+.bg-halftone {
+  background-color: var(--neo-bg);
+  background-image: radial-gradient(#000000 1.5px, transparent 1.5px);
+  background-size: 20px 20px;
+}
+
+.bg-grid {
+  background-size: 32px 32px;
+  background-image: 
+    linear-gradient(to right, rgba(0, 0, 0, 0.08) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.08) 1px, transparent 1px);
+}
+
+.bg-dots {
+  background-image: radial-gradient(circle, #000000 1.8px, transparent 1.8px);
+  background-size: 24px 24px;
+}
+
+/* Solid Hard Zero-Blur Shadows */
+.shadow-neo-xs {
+  box-shadow: 2px 2px 0px 0px #000000;
+}
+
+.shadow-neo-sm {
+  box-shadow: 4px 4px 0px 0px #000000;
+}
+
+.shadow-neo-md {
+  box-shadow: 8px 8px 0px 0px #000000;
+}
+
+.shadow-neo-lg {
+  box-shadow: 12px 12px 0px 0px #000000;
+}
+
+.shadow-neo-xl {
+  box-shadow: 16px 16px 0px 0px #000000;
+}
+
+.shadow-neo-white {
+  box-shadow: 6px 6px 0px 0px #FFFFFF;
+}
+
+/* Mechanical Push-Down Physics for Buttons */
+.btn-neo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: var(--font-space-grotesk);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border: 4px solid var(--neo-black);
+  cursor: pointer;
+  outline: none;
+  user-select: none;
+  transition: transform 0.1s ease-out, box-shadow 0.1s ease-out, background-color 0.1s ease-out;
+  box-shadow: 4px 4px 0px 0px var(--neo-black);
+  border-radius: 0px;
+}
+
+.btn-neo:hover:not(:disabled) {
+  transform: translate(-1px, -1px);
+  box-shadow: 6px 6px 0px 0px var(--neo-black);
+}
+
+.btn-neo:active:not(:disabled) {
+  transform: translate(3px, 3px);
+  box-shadow: 1px 1px 0px 0px var(--neo-black);
+}
+
+.btn-neo:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  box-shadow: 2px 2px 0px 0px var(--neo-black);
+}
+
+/* Card Lift Physics */
+.card-neo {
+  background-color: var(--neo-white);
+  border: 4px solid var(--neo-black);
+  box-shadow: 8px 8px 0px 0px var(--neo-black);
+  transition: transform 0.15s ease-out, box-shadow 0.15s ease-out;
+  border-radius: 0px;
+}
+
+.card-neo-hover:hover {
+  transform: translateY(-3px);
+  box-shadow: 12px 12px 0px 0px var(--neo-black);
+}
+
+/* Inputs & Form Elements */
+.input-neo {
+  width: 100%;
+  font-family: var(--font-space-grotesk);
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--neo-black);
+  background-color: var(--neo-white);
+  border: 4px solid var(--neo-black);
+  padding: 12px 16px;
+  outline: none;
+  border-radius: 0px;
+  box-shadow: 4px 4px 0px 0px var(--neo-black);
+  transition: background-color 0.15s ease-out, box-shadow 0.15s ease-out;
+}
+
+.input-neo:focus {
+  background-color: var(--neo-secondary);
+  box-shadow: 6px 6px 0px 0px var(--neo-black);
+}
+
+.input-neo::placeholder {
+  color: rgba(0, 0, 0, 0.45);
+  font-weight: 600;
+}
+
+/* Text Stroke Utilities */
+.text-stroke-2 {
+  -webkit-text-stroke: 2px var(--neo-black);
+  color: transparent;
+}
+
+.text-stroke-3 {
+  -webkit-text-stroke: 3px var(--neo-black);
+  color: transparent;
+}
+
+/* Sticker Rotations */
+.rotate-sticker-neg2 {
+  transform: rotate(-2deg);
+}
+
+.rotate-sticker-pos1 {
+  transform: rotate(1deg);
+}
+
+.rotate-sticker-pos2 {
+  transform: rotate(2deg);
+}
+
+.rotate-sticker-pos3 {
+  transform: rotate(3deg);
+}
+
+/* Custom Scrollbar for Neo-Brutalism */
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--neo-bg);
+  border-left: 3px solid var(--neo-black);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--neo-secondary);
+  border: 3px solid var(--neo-black);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--neo-accent);
+}
+
+/* Range Slider Styling */
+input[type="range"].slider-neo {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 16px;
+  background: var(--neo-white);
+  border: 3px solid var(--neo-black);
+  outline: none;
+  box-shadow: 3px 3px 0px 0px var(--neo-black);
+}
+
+input[type="range"].slider-neo::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 28px;
+  height: 28px;
+  background: var(--neo-secondary);
+  border: 3px solid var(--neo-black);
+  cursor: pointer;
+  box-shadow: 2px 2px 0px 0px var(--neo-black);
+  transition: transform 0.1s ease, background 0.1s ease;
+}
+
+input[type="range"].slider-neo::-webkit-slider-thumb:hover {
+  background: var(--neo-accent);
+  transform: scale(1.1);
+}
+
+input[type="range"].slider-neo::-moz-range-thumb {
+  width: 28px;
+  height: 28px;
+  background: var(--neo-secondary);
+  border: 3px solid var(--neo-black);
+  cursor: pointer;
+  box-shadow: 2px 2px 0px 0px var(--neo-black);
 }
