@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/Badge";
 import { useLedger } from "@/context/LedgerContext";
 import { parseReceiptText, SAMPLE_RECEIPTS } from "@/lib/ocr/receiptParser";
 import { OCRExtractionResult } from "@/types/ocr";
-import { Camera, Upload, AlertTriangle, CheckCircle, FileText, Sparkles } from "lucide-react";
+import { Camera, Upload, AlertTriangle, CheckCircle, FileText, Sparkles, Loader2 } from "lucide-react";
 
 interface ReceiptUploadModalProps {
   isOpen: boolean;
@@ -23,6 +23,7 @@ export const ReceiptUploadModal: React.FC<ReceiptUploadModalProps> = ({
 
   const [rawText, setRawText] = useState("");
   const [ocrResult, setOcrResult] = useState<OCRExtractionResult | null>(null);
+  const [isScanning, setIsScanning] = useState(false);
 
   // Editable Form fields
   const [amount, setAmount] = useState("");
@@ -49,13 +50,71 @@ export const ReceiptUploadModal: React.FC<ReceiptUploadModalProps> = ({
     handleRunOCR(previewText);
   };
 
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    // Simulate OCR text extraction from filename and sample patterns
-    const simulatedMemo = `INVOICE / CASH MEMO\nStore: ${file.name.replace(/\.[^/.]+$/, "")}\nDate: ${todayDate}\nTotal: 1250.00 BDT\nThank you!`;
-    handleRunOCR(simulatedMemo);
+    setIsScanning(true);
+    setOcrResult(null);
+    setError("");
+
+    try {
+      const formData = new FormData();
+      formData.append("image", file);
+
+      const res = await fetch("/api/ocr", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await res.json();
+
+      if (!res.ok || data.error) {
+        throw new Error(data.error ?? `Server error ${res.status}`);
+      }
+
+      // Map Gemini response → OCRExtractionResult
+      const result: OCRExtractionResult = {
+        amount: {
+          value: data.amountUncertain ? "" : (data.amount ?? ""),
+          confidence: data.amountUncertain ? 0.3 : 0.92,
+          isUncertain: data.amountUncertain ?? true,
+        },
+        date: {
+          value: data.date || todayDate,
+          confidence: data.dateUncertain ? 0.4 : 0.95,
+          isUncertain: data.dateUncertain ?? false,
+        },
+        shop: {
+          value: data.shop ?? "",
+          confidence: data.shopUncertain ? 0.3 : 0.95,
+          isUncertain: data.shopUncertain ?? true,
+        },
+        category: {
+          value: data.category ?? "Other",
+          confidence: 0.9,
+          isUncertain: false,
+        },
+        rawText: `[Image scanned via Gemini OCR]`,
+        warnings: data.warnings ?? [],
+      };
+
+      setOcrResult(result);
+      setAmount(result.amount.value);
+      setDate(result.date.value || todayDate);
+      setShop(result.shop.value);
+      setCategory(result.category.value || "Other");
+    } catch (err) {
+      setError(
+        err instanceof Error
+          ? `OCR failed: ${err.message}`
+          : "OCR failed. Please paste the text manually."
+      );
+    } finally {
+      setIsScanning(false);
+      // Reset file input so the same file can be re-uploaded if needed
+      e.target.value = "";
+    }
   };
 
   const handleSaveExpense = (e: React.FormEvent) => {
@@ -119,16 +178,29 @@ export const ReceiptUploadModal: React.FC<ReceiptUploadModalProps> = ({
         {/* Upload Zone & Manual Text Paste */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {/* File Upload Dropzone */}
-          <label className="border border-dashed border-gray-200 p-4 bg-white shadow-md flex flex-col items-center justify-center gap-2 cursor-pointer hover:bg-yellow-50 transition-colors">
-            <Camera className="w-8 h-8 text-gray-900" />
-            <span className="text-xs font-semibold uppercase text-center">
-              Upload Memo / Receipt Photo
-            </span>
-            <span className="text-[10px] font-bold text-gray-900">PNG, JPG, or PDF</span>
+          <label className={`border border-dashed border-gray-200 p-4 bg-white shadow-md flex flex-col items-center justify-center gap-2 cursor-pointer hover:bg-yellow-50 transition-colors ${isScanning ? "opacity-60 pointer-events-none" : ""}`}>
+            {isScanning ? (
+              <>
+                <Loader2 className="w-8 h-8 text-gray-900 animate-spin" />
+                <span className="text-xs font-semibold uppercase text-center">
+                  Scanning with Gemini AI…
+                </span>
+                <span className="text-[10px] font-bold text-gray-500">This may take a few seconds</span>
+              </>
+            ) : (
+              <>
+                <Camera className="w-8 h-8 text-gray-900" />
+                <span className="text-xs font-semibold uppercase text-center">
+                  Upload Memo / Receipt Photo
+                </span>
+                <span className="text-[10px] font-bold text-gray-900">PNG, JPG, or PDF</span>
+              </>
+            )}
             <input
               type="file"
               accept="image/*"
               className="hidden"
+              disabled={isScanning}
               onChange={handleFileUpload}
             />
           </label>
