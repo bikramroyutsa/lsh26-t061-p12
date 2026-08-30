@@ -62,7 +62,7 @@ export const AddExpenseModal: React.FC<AddExpenseModalProps> = ({
     >
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         {error && (
-          <div className="p-3 bg-[#FF6B6B]/20 border-2 border-[#FF6B6B] text-xs font-bold text-black">
+          <div className="p-3 bg-white border border-[#FF6B6B] text-xs font-bold text-gray-900">
             ⚠️ {error}
           </div>
         )}
@@ -77,13 +77,13 @@ export const AddExpenseModal: React.FC<AddExpenseModalProps> = ({
           />
 
           <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-black uppercase tracking-wider text-black">
+            <label className="text-xs font-semibold text-sm text-gray-500 text-gray-900">
               Category
             </label>
             <select
               value={category}
               onChange={(e) => setCategory(e.target.value)}
-              className="input-neo font-bold text-sm"
+              className="w-full bg-white border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500 font-bold text-sm"
             >
               <option value="Food">Food</option>
               <option value="Groceries">Groceries</option>

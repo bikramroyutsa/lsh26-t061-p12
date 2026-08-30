@@ -21,16 +21,16 @@ export const PocketList: React.FC = () => {
   return (
     <div className="flex flex-col gap-4">
       {/* Section Header */}
-      <div className="flex items-center justify-between flex-wrap gap-3 bg-[#FFD93D] border-4 border-black p-4 shadow-neo-sm">
+      <div className="flex items-center justify-between flex-wrap gap-3 bg-white border border-gray-200 rounded-lg p-4 shadow-md">
         <div className="flex items-center gap-3">
-          <div className="p-2 border-2 border-black bg-white shadow-neo-xs">
+          <div className="p-2 border border-gray-200 rounded-lg bg-white shadow-md">
             <PiggyBank className="w-6 h-6 stroke-[2.5px]" />
           </div>
           <div>
-            <h2 className="font-black text-xl uppercase tracking-tight text-black">
+            <h2 className="font-semibold text-xl uppercase tracking-tight text-gray-900">
               Savings Pockets & DPS Yields
             </h2>
-            <span className="text-xs font-bold text-black/75">
+            <span className="text-xs font-bold text-gray-900">
               Forecast-derived completion timelines with compound DPS returns
             </span>
           </div>
@@ -55,8 +55,8 @@ export const PocketList: React.FC = () => {
       {pocketsWithProjections.length === 0 ? (
         <Card variant="white" shadow="md">
           <div className="text-center py-10 flex flex-col items-center gap-3">
-            <Target className="w-12 h-12 text-black/40" />
-            <p className="font-black text-base uppercase text-black/70">
+            <Target className="w-12 h-12 text-gray-900" />
+            <p className="font-semibold text-base uppercase text-gray-900">
               No savings pockets created yet
             </p>
             <Button

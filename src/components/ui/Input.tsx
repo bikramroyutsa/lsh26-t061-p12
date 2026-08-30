@@ -1,56 +1,32 @@
-import React from "react";
+import React from 'react';
 
 export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
-  helperText?: string;
   error?: string;
-  icon?: React.ReactNode;
-  wrapperClassName?: string;
 }
 
-export const Input: React.FC<InputProps> = ({
-  label,
-  helperText,
-  error,
-  icon,
-  className = "",
-  wrapperClassName = "",
+export const Input: React.FC<InputProps> = ({ 
+  label, 
+  error, 
+  className = '', 
   id,
-  ...props
+  ...props 
 }) => {
-  const inputId = id || (label ? label.toLowerCase().replace(/\s+/g, "-") : undefined);
+  const inputId = id || (label ? label.toLowerCase().replace(/\s+/g, '-') : undefined);
 
   return (
-    <div className={`flex flex-col gap-1.5 ${wrapperClassName}`}>
+    <div className="w-full flex flex-col gap-1.5 mb-4">
       {label && (
-        <label
-          htmlFor={inputId}
-          className="text-xs font-black uppercase tracking-wider text-black flex items-center gap-1.5"
-        >
+        <label htmlFor={inputId} className="text-sm font-medium text-gray-700">
           {label}
         </label>
       )}
-      <div className="relative flex items-center">
-        {icon && (
-          <div className="absolute left-3.5 flex items-center pointer-events-none text-black">
-            {icon}
-          </div>
-        )}
-        <input
-          id={inputId}
-          className={`input-neo ${icon ? "pl-11" : ""} ${
-            error ? "bg-[#FF6B6B]/20 border-[#FF6B6B]" : ""
-          } ${className}`}
-          {...props}
-        />
-      </div>
-      {error ? (
-        <span className="text-xs font-bold text-[#FF6B6B] flex items-center gap-1">
-          ⚠️ {error}
-        </span>
-      ) : helperText ? (
-        <span className="text-xs font-medium text-black/70">{helperText}</span>
-      ) : null}
+      <input
+        id={inputId}
+        className={`w-full bg-white border ${error ? 'border-red-500' : 'border-gray-300'} rounded-lg px-4 py-2.5 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors ${className}`}
+        {...props}
+      />
+      {error && <span className="text-sm text-red-500 mt-1">{error}</span>}
     </div>
   );
 };

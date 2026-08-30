@@ -25,13 +25,13 @@ export const WrittenInsights: React.FC = () => {
   const getSeverityBg = (severity: string) => {
     switch (severity) {
       case "critical":
-        return "bg-[#FF6B6B]/15 border-[#FF6B6B]";
+        return "bg-white border-[#FF6B6B]";
       case "warning":
-        return "bg-[#FFD93D]/25 border-black";
+        return "bg-white border-gray-200";
       case "positive":
-        return "bg-[#00F0B5]/20 border-black";
+        return "bg-white border-gray-200";
       default:
-        return "bg-[#FFFDF5] border-black";
+        return "bg-white border-gray-200";
     }
   };
 
@@ -56,17 +56,17 @@ export const WrittenInsights: React.FC = () => {
         {insights.map((insight) => (
           <div
             key={insight.id}
-            className={`border-3 p-4 shadow-neo-xs flex items-start gap-3.5 ${getSeverityBg(
+            className={`border p-4 shadow-md flex items-start gap-3.5 ${getSeverityBg(
               insight.severity
             )} hover:translate-x-0.5 transition-transform`}
           >
-            <div className="p-2 border-2 border-black bg-white shadow-neo-xs mt-0.5">
+            <div className="p-2 border border-gray-200 rounded-lg bg-white shadow-md mt-0.5">
               {getSeverityIcon(insight.type, insight.severity)}
             </div>
 
             <div className="flex-1 flex flex-col gap-1">
               <div className="flex items-center justify-between flex-wrap gap-2">
-                <span className="font-black text-sm uppercase tracking-tight text-black">
+                <span className="font-semibold text-sm uppercase tracking-tight text-gray-900">
                   {insight.title}
                 </span>
                 {insight.category && (
@@ -75,7 +75,7 @@ export const WrittenInsights: React.FC = () => {
                   </Badge>
                 )}
               </div>
-              <p className="text-xs font-bold text-black/85 leading-relaxed">
+              <p className="text-xs font-bold text-gray-900 leading-relaxed">
                 {insight.message}
               </p>
             </div>

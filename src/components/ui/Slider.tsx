@@ -1,54 +1,34 @@
-import React from "react";
+import React from 'react';
 
-export interface SliderProps {
-  label?: string;
+export interface SliderProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type'> {
   value: number;
-  min: number;
-  max: number;
+  min?: number;
+  max?: number;
   step?: number;
-  valueFormatter?: (val: number) => string;
-  onChange: (value: number) => void;
-  className?: string;
-  helperText?: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export const Slider: React.FC<SliderProps> = ({
-  label,
   value,
-  min,
-  max,
+  min = 0,
+  max = 100,
   step = 1,
-  valueFormatter = (val) => val.toString(),
   onChange,
-  className = "",
-  helperText,
+  className = '',
+  ...props
 }) => {
   return (
-    <div className={`flex flex-col gap-2 ${className}`}>
-      <div className="flex items-center justify-between">
-        {label && (
-          <label className="text-xs font-black uppercase tracking-wider text-black">
-            {label}
-          </label>
-        )}
-        <span className="px-2.5 py-0.5 bg-[#FFD93D] border-2 border-black font-black text-xs shadow-neo-xs">
-          {valueFormatter(value)}
-        </span>
-      </div>
+    <div className={`relative w-full flex items-center ${className}`}>
       <input
         type="range"
         min={min}
         max={max}
         step={step}
         value={value}
-        onChange={(e) => onChange(Number(e.target.value))}
-        className="slider-neo"
+        onChange={onChange}
+        className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+        {...props}
       />
-      <div className="flex items-center justify-between text-[11px] font-bold text-black/60">
-        <span>{valueFormatter(min)}</span>
-        {helperText && <span className="text-black font-bold">{helperText}</span>}
-        <span>{valueFormatter(max)}</span>
-      </div>
     </div>
   );
 };

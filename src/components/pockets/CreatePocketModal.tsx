@@ -66,7 +66,7 @@ export const CreatePocketModal: React.FC<CreatePocketModalProps> = ({
     >
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         {error && (
-          <div className="p-3 bg-[#FF6B6B]/20 border-2 border-[#FF6B6B] text-xs font-bold text-black">
+          <div className="p-3 bg-white border border-[#FF6B6B] text-xs font-bold text-gray-900">
             ⚠️ {error}
           </div>
         )}

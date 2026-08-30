@@ -43,8 +43,8 @@ export const SalaryOverview: React.FC = () => {
     >
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
         {/* 1. Salary Field */}
-        <div className="border-3 border-black p-4 bg-[#FFFDF5] shadow-neo-xs flex flex-col gap-2">
-          <span className="text-xs font-black uppercase text-black/60 tracking-wider">
+        <div className="border border-gray-200 rounded-lg p-4 bg-white shadow-md flex flex-col gap-2">
+          <span className="text-xs font-semibold uppercase text-gray-900 tracking-wider">
             Monthly Salary (BDT)
           </span>
           {isEditingSalary ? (
@@ -53,7 +53,7 @@ export const SalaryOverview: React.FC = () => {
                 type="number"
                 value={tempSalary}
                 onChange={(e) => setTempSalary(e.target.value)}
-                className="w-full font-black text-xl border-2 border-black px-2 py-1 bg-[#FFD93D] outline-none"
+                className="w-full font-semibold text-xl border border-gray-200 rounded-lg px-2 py-1 bg-white outline-none"
                 autoFocus
               />
               <Button size="sm" variant="mint" onClick={handleSaveSalary}>
@@ -62,7 +62,7 @@ export const SalaryOverview: React.FC = () => {
             </div>
           ) : (
             <div className="flex items-center justify-between">
-              <span className="text-2xl font-black text-black">
+              <span className="text-2xl font-semibold text-gray-900">
                 ৳{salary.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
               </span>
               <button
@@ -70,7 +70,7 @@ export const SalaryOverview: React.FC = () => {
                   setTempSalary(salary.toString());
                   setIsEditingSalary(true);
                 }}
-                className="p-1.5 border-2 border-black bg-[#C4B5FD] hover:bg-[#b09afc] shadow-neo-xs active:translate-x-0.5 active:translate-y-0.5 transition-all"
+                className="p-1.5 border border-gray-200 rounded-lg bg-white hover:bg-white shadow-md active:translate-x-0.5 active:translate-y-0.5 transition-all"
                 title="Edit Salary"
               >
                 <Edit2 className="w-3.5 h-3.5 stroke-[2.5px]" />
@@ -80,32 +80,32 @@ export const SalaryOverview: React.FC = () => {
         </div>
 
         {/* 2. Total Spent So Far */}
-        <div className="border-3 border-black p-4 bg-[#FFFDF5] shadow-neo-xs flex flex-col gap-2">
+        <div className="border border-gray-200 rounded-lg p-4 bg-white shadow-md flex flex-col gap-2">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-black uppercase text-black/60 tracking-wider">
+            <span className="text-xs font-semibold uppercase text-gray-900 tracking-wider">
               Total Spent So Far
             </span>
             <Badge variant="accent" size="sm">
               {spentPercent.toFixed(1)}% of Salary
             </Badge>
           </div>
-          <span className="text-2xl font-black text-[#FF6B6B]">
+          <span className="text-2xl font-semibold text-[#FF6B6B]">
             ৳{forecast.current_spent_bdt.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
           </span>
         </div>
 
         {/* 3. Current In-Hand Balance */}
         <div
-          className={`border-3 border-black p-4 shadow-neo-xs flex flex-col gap-2 ${
-            netBalance >= 0 ? "bg-[#00F0B5]/20" : "bg-[#FF6B6B]/20"
+          className={`border border-gray-200 rounded-lg p-4 shadow-md flex flex-col gap-2 ${
+            netBalance >= 0 ? "bg-white" : "bg-white"
           }`}
         >
-          <span className="text-xs font-black uppercase text-black/60 tracking-wider">
+          <span className="text-xs font-semibold uppercase text-gray-900 tracking-wider">
             Current Balance (In-Hand)
           </span>
           <span
-            className={`text-2xl font-black ${
-              netBalance >= 0 ? "text-black" : "text-[#FF6B6B]"
+            className={`text-2xl font-semibold ${
+              netBalance >= 0 ? "text-gray-900" : "text-[#FF6B6B]"
             }`}
           >
             ৳{netBalance.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
@@ -114,8 +114,8 @@ export const SalaryOverview: React.FC = () => {
       </div>
 
       {/* Live Spend Progress Bar */}
-      <div className="mt-6 pt-4 border-t-2 border-black/20 flex flex-col gap-2">
-        <div className="flex items-center justify-between text-xs font-black uppercase">
+      <div className="mt-6 pt-4 border-gray-200 flex flex-col gap-2">
+        <div className="flex items-center justify-between text-xs font-semibold uppercase">
           <span>Actual Spent: ৳{forecast.current_spent_bdt.toLocaleString("en-IN")}</span>
           <span>
             Projected Month-End Spend: ৳{forecast.total_projected_spend_bdt.toLocaleString("en-IN")}

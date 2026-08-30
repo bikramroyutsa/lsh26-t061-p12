@@ -32,7 +32,7 @@ export const LargestExpenses: React.FC = () => {
       headerBg="accent"
     >
       {largest.length === 0 ? (
-        <div className="text-center py-8 font-bold text-black/60">
+        <div className="text-center py-8 font-bold text-gray-900">
           No expenses recorded for {selectedMonth}.
         </div>
       ) : (
@@ -43,22 +43,22 @@ export const LargestExpenses: React.FC = () => {
             return (
               <div
                 key={item.id}
-                className="border-3 border-black p-3 bg-[#FFFDF5] shadow-neo-xs flex items-center justify-between flex-wrap gap-2 hover:bg-[#FFE600]/15 transition-all"
+                className="border border-gray-200 rounded-lg p-3 bg-white shadow-md flex items-center justify-between flex-wrap gap-2 hover:bg-white transition-all"
               >
                 <div className="flex items-center gap-3">
-                  <span className="w-7 h-7 bg-black text-white font-black text-xs flex items-center justify-center border border-black shadow-neo-xs">
+                  <span className="w-7 h-7 bg-indigo-600 text-white font-semibold text-xs flex items-center justify-center border border-gray-200 shadow-md">
                     #{idx + 1}
                   </span>
                   <div className="flex flex-col">
                     <div className="flex items-center gap-2">
-                      <span className="font-black text-sm text-black">{item.shop}</span>
+                      <span className="font-semibold text-sm text-gray-900">{item.shop}</span>
                       {isRecurring && (
                         <Badge variant="mint" size="sm" pill>
                           <Repeat className="w-2.5 h-2.5 stroke-[3px]" /> Recurring
                         </Badge>
                       )}
                     </div>
-                    <div className="flex items-center gap-3 text-xs font-bold text-black/60">
+                    <div className="flex items-center gap-3 text-xs font-bold text-gray-900">
                       <span className="flex items-center gap-1">
                         <Store className="w-3 h-3" /> {item.category}
                       </span>
@@ -70,7 +70,7 @@ export const LargestExpenses: React.FC = () => {
                 </div>
 
                 <div className="text-right">
-                  <span className="font-black text-base text-black">
+                  <span className="font-semibold text-base text-gray-900">
                     ৳{item.amount_bdt.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
                   </span>
                 </div>

@@ -78,23 +78,23 @@ export const ExpenseTable: React.FC<ExpenseTableProps> = ({ onOpenAddExpense }) 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
           {/* Search Box */}
           <div className="relative flex items-center">
-            <Search className="absolute left-3 w-4 h-4 text-black/50" />
+            <Search className="absolute left-3 w-4 h-4 text-gray-900" />
             <input
               type="text"
               placeholder="Search shop, category, date..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-9 pr-3 py-2 border-2 border-black bg-[#FFFDF5] font-bold text-xs outline-none shadow-neo-xs"
+              className="w-full pl-9 pr-3 py-2 border border-gray-200 rounded-lg bg-white font-bold text-xs outline-none shadow-md"
             />
           </div>
 
           {/* Category Filter */}
-          <div className="flex items-center gap-2 bg-[#FFFDF5] border-2 border-black px-2.5 py-1 shadow-neo-xs">
-            <Filter className="w-4 h-4 text-black/60" />
+          <div className="flex items-center gap-2 bg-white border border-gray-200 rounded-lg px-2.5 py-1 shadow-md">
+            <Filter className="w-4 h-4 text-gray-900" />
             <select
               value={selectedCategoryFilter}
               onChange={(e) => setSelectedCategoryFilter(e.target.value)}
-              className="w-full bg-transparent font-black text-xs outline-none cursor-pointer"
+              className="w-full bg-transparent font-semibold text-xs outline-none cursor-pointer"
             >
               {allCategories.map((cat) => (
                 <option key={cat} value={cat}>
@@ -108,10 +108,10 @@ export const ExpenseTable: React.FC<ExpenseTableProps> = ({ onOpenAddExpense }) 
           <div className="flex items-center gap-2 justify-end">
             <button
               onClick={() => setShowOnlyRecurring(!showOnlyRecurring)}
-              className={`px-3 py-2 border-2 border-black text-xs font-black uppercase transition-all shadow-neo-xs ${
+              className={`px-3 py-2 border border-gray-200 rounded-lg text-xs font-semibold uppercase transition-all shadow-md ${
                 showOnlyRecurring
-                  ? "bg-[#00F0B5] text-black"
-                  : "bg-white text-black hover:bg-gray-100"
+                  ? "bg-white text-gray-900"
+                  : "bg-white text-gray-900 hover:bg-gray-100"
               }`}
             >
               <Repeat className="w-3.5 h-3.5 inline mr-1" />
@@ -125,9 +125,9 @@ export const ExpenseTable: React.FC<ExpenseTableProps> = ({ onOpenAddExpense }) 
         </div>
 
         {/* Expenses Table */}
-        <div className="border-3 border-black overflow-x-auto shadow-neo-xs">
+        <div className="border border-gray-200 rounded-lg overflow-x-auto shadow-md">
           <table className="w-full text-left text-xs font-bold border-collapse bg-white">
-            <thead className="bg-[#FFD93D] border-b-2 border-black text-[11px] font-black uppercase">
+            <thead className="bg-white border-gray-200 text-[11px] font-semibold uppercase">
               <tr>
                 <th className="p-2.5">Date</th>
                 <th className="p-2.5">Shop / Merchant</th>
@@ -140,7 +140,7 @@ export const ExpenseTable: React.FC<ExpenseTableProps> = ({ onOpenAddExpense }) 
             <tbody className="divide-y divide-black/10">
               {filteredExpenses.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="text-center py-8 text-black/50 font-bold">
+                  <td colSpan={6} className="text-center py-8 text-gray-900 font-bold">
                     No expense records matching the active filters.
                   </td>
                 </tr>
@@ -153,13 +153,13 @@ export const ExpenseTable: React.FC<ExpenseTableProps> = ({ onOpenAddExpense }) 
                       key={e.id}
                       className="hover:bg-yellow-50/70 transition-colors"
                     >
-                      <td className="p-2.5 font-mono text-[11px] font-bold text-black/80">
+                      <td className="p-2.5 font-mono text-[11px] font-bold text-gray-900">
                         {e.date}
                       </td>
-                      <td className="p-2.5 font-black text-black">
+                      <td className="p-2.5 font-semibold text-gray-900">
                         {e.shop}
                         {e.notes && (
-                          <span className="block text-[10px] font-normal text-black/50">
+                          <span className="block text-[10px] font-normal text-gray-900">
                             {e.notes}
                           </span>
                         )}
@@ -169,7 +169,7 @@ export const ExpenseTable: React.FC<ExpenseTableProps> = ({ onOpenAddExpense }) 
                           {e.category}
                         </Badge>
                       </td>
-                      <td className="p-2.5 text-right font-black text-sm text-black">
+                      <td className="p-2.5 text-right font-semibold text-sm text-gray-900">
                         ৳{e.amount_bdt.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
                       </td>
                       <td className="p-2.5 text-center">
@@ -178,13 +178,13 @@ export const ExpenseTable: React.FC<ExpenseTableProps> = ({ onOpenAddExpense }) 
                             <Repeat className="w-2.5 h-2.5 stroke-[3px]" /> Recurring (2-Mo Match)
                           </Badge>
                         ) : (
-                          <span className="text-[10px] text-black/30 font-bold">—</span>
+                          <span className="text-[10px] text-gray-900 font-bold">—</span>
                         )}
                       </td>
                       <td className="p-2.5 text-right">
                         <button
                           onClick={() => deleteExpense(e.id)}
-                          className="p-1 border border-black bg-white hover:bg-[#FF6B6B] text-black transition-colors shadow-neo-xs active:translate-x-0.5 active:translate-y-0.5"
+                          className="p-1 border border-gray-200 bg-white hover:bg-white text-gray-900 transition-colors shadow-md active:translate-x-0.5 active:translate-y-0.5"
                           title="Delete Expense"
                         >
                           <Trash2 className="w-3.5 h-3.5" />

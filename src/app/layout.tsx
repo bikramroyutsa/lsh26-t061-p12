@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
+import { Inter } from "next/font/google";
 import "./globals.css";
+
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "DHAKA LEDGER // Personal Financial Manager",
-  description: "Neo-Brutalist personal ledger, expense forecaster, DPS calculator & savings pocket tracker for Dhaka.",
+  description: "Minimalist material personal ledger, expense forecaster, DPS calculator & savings pocket tracker.",
 };
 
 export default function RootLayout({
@@ -13,15 +16,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700;900&display=swap"
-          rel="stylesheet"
-        />
-      </head>
-      <body className="bg-grid min-h-screen flex flex-col antialiased">
+      <body className={`${inter.className} min-h-screen flex flex-col antialiased bg-gray-50`}>
         {children}
       </body>
     </html>
