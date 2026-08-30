@@ -84,57 +84,65 @@ export const MonthlyComparison: React.FC = () => {
         </div>
       </div>
 
-      {/* Category Level MoM Table */}
-      <div className="overflow-x-auto">
-        <table className="w-full text-left border-collapse">
-          <thead>
-            <tr className="border-gray-200 bg-white text-[11px] font-semibold uppercase">
-              <th className="py-2 px-2">Category</th>
-              <th className="py-2 px-2 text-right">{momComparison.last_month}</th>
-              <th className="py-2 px-2 text-right">{momComparison.this_month}</th>
-              <th className="py-2 px-2 text-right">Change (BDT)</th>
-              <th className="py-2 px-2 text-right">% Change</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y border-gray-200">
-            {momComparison.category_changes.map((item) => {
-              const increased = item.delta_bdt > 0;
-              const isZero = item.delta_bdt === 0;
+      {/* Top Movers list */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 p-4">
+        {/* Top Increases */}
+        <div className="flex flex-col gap-3">
+          <div className="text-xs font-bold uppercase text-slate-400 mb-2 border-b border-gray-100 pb-2">
+            Top Spending Increases
+          </div>
+          {momComparison.category_changes
+            .filter((c) => c.delta_bdt > 0)
+            .sort((a, b) => b.delta_bdt - a.delta_bdt)
+            .slice(0, 3)
+            .map((item) => (
+              <div key={item.category} className="flex items-center justify-between">
+                <span className="text-sm font-semibold text-slate-800 uppercase">
+                  {item.category}
+                </span>
+                <div className="flex items-center gap-2">
+                  <span className="text-sm font-bold text-[#FF6B6B]">
+                    +৳{Math.abs(item.delta_bdt).toLocaleString("en-IN")}
+                  </span>
+                  <span className="text-[10px] font-bold bg-red-50 text-[#FF6B6B] px-1.5 py-0.5 rounded-md">
+                    +{item.delta_percentage.toFixed(0)}%
+                  </span>
+                </div>
+              </div>
+            ))}
+          {momComparison.category_changes.filter((c) => c.delta_bdt > 0).length === 0 && (
+            <span className="text-sm text-slate-400 font-medium">No increases this month.</span>
+          )}
+        </div>
 
-              return (
-                <tr key={item.category} className="hover:bg-gray-50 text-xs font-bold">
-                  <td className="py-2 px-2 font-semibold uppercase">{item.category}</td>
-                  <td className="py-2 px-2 text-right text-slate-800">
-                    ৳{item.last_bdt.toLocaleString("en-IN")}
-                  </td>
-                  <td className="py-2 px-2 text-right text-slate-800">
-                    ৳{item.this_bdt.toLocaleString("en-IN")}
-                  </td>
-                  <td
-                    className={`py-2 px-2 text-right font-semibold ${
-                      isZero ? "text-slate-800" : increased ? "text-[#FF6B6B]" : "text-[#00B894]"
-                    }`}
-                  >
-                    {isZero ? "৳0.00" : `${increased ? "+" : "-"}৳${Math.abs(item.delta_bdt).toLocaleString("en-IN")}`}
-                  </td>
-                  <td className="py-2 px-2 text-right">
-                    <span
-                      className={`inline-block px-1.5 py-0.5 border-none text-[10px] font-semibold ${
-                        isZero
-                          ? "bg-white text-slate-800"
-                          : increased
-                          ? "bg-white text-[#FF6B6B]"
-                          : "bg-white text-slate-800"
-                      }`}
-                    >
-                      {isZero ? "0.0%" : `${increased ? "+" : ""}${item.delta_percentage.toFixed(1)}%`}
-                    </span>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+        {/* Top Decreases */}
+        <div className="flex flex-col gap-3">
+          <div className="text-xs font-bold uppercase text-slate-400 mb-2 border-b border-gray-100 pb-2">
+            Top Savings (Decreases)
+          </div>
+          {momComparison.category_changes
+            .filter((c) => c.delta_bdt < 0)
+            .sort((a, b) => a.delta_bdt - b.delta_bdt) // sort ascending so largest negative is first
+            .slice(0, 3)
+            .map((item) => (
+              <div key={item.category} className="flex items-center justify-between">
+                <span className="text-sm font-semibold text-slate-800 uppercase">
+                  {item.category}
+                </span>
+                <div className="flex items-center gap-2">
+                  <span className="text-sm font-bold text-[#00B894]">
+                    -৳{Math.abs(item.delta_bdt).toLocaleString("en-IN")}
+                  </span>
+                  <span className="text-[10px] font-bold bg-emerald-50 text-[#00B894] px-1.5 py-0.5 rounded-md">
+                    {item.delta_percentage.toFixed(0)}%
+                  </span>
+                </div>
+              </div>
+            ))}
+          {momComparison.category_changes.filter((c) => c.delta_bdt < 0).length === 0 && (
+            <span className="text-sm text-slate-400 font-medium">No decreases this month.</span>
+          )}
+        </div>
       </div>
     </Card>
   );

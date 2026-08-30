@@ -41,11 +41,11 @@ export const SalaryOverview: React.FC = () => {
       }
       headerBg="secondary"
     >
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+      <div className="flex flex-wrap items-center justify-center sm:justify-between gap-6 p-6 sm:p-8 bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
         {/* 1. Salary Field */}
-        <div className="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] p-6 sm:p-8 flex flex-col gap-2">
-          <span className="text-xs font-semibold uppercase text-slate-800 tracking-wider">
-            Monthly Salary (BDT)
+        <div className="flex flex-col gap-1 w-full xl:w-auto min-w-[140px]">
+          <span className="text-xs font-bold uppercase text-slate-400 tracking-wider">
+            Monthly Salary
           </span>
           {isEditingSalary ? (
             <div className="flex items-center gap-2">
@@ -53,7 +53,7 @@ export const SalaryOverview: React.FC = () => {
                 type="number"
                 value={tempSalary}
                 onChange={(e) => setTempSalary(e.target.value)}
-                className="w-full font-semibold text-xl rounded-2xl px-2 py-1 bg-white outline-none"
+                className="w-28 font-bold text-xl rounded-xl px-3 py-1 bg-[#F6F5FB] outline-none"
                 autoFocus
               />
               <Button size="sm" variant="primary" onClick={handleSaveSalary}>
@@ -61,8 +61,8 @@ export const SalaryOverview: React.FC = () => {
               </Button>
             </div>
           ) : (
-            <div className="flex items-center justify-between">
-              <span className="text-2xl font-semibold text-slate-800">
+            <div className="flex items-center gap-2">
+              <span className="text-2xl font-bold text-slate-800">
                 ৳{salary.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
               </span>
               <button
@@ -70,42 +70,42 @@ export const SalaryOverview: React.FC = () => {
                   setTempSalary(salary.toString());
                   setIsEditingSalary(true);
                 }}
-                className="p-1.5 rounded-2xl bg-white hover:bg-white shadow-sm active:translate-x-0.5 active:translate-y-0.5 transition-all"
+                className="p-1.5 rounded-full bg-slate-50 hover:bg-slate-100 transition-colors shrink-0"
                 title="Edit Salary"
               >
-                <Edit2 className="w-3.5 h-3.5 stroke-[2.5px]" />
+                <Edit2 className="w-4 h-4 stroke-[2.5px] text-slate-400" />
               </button>
             </div>
           )}
         </div>
 
+        <div className="hidden xl:block w-[1px] h-12 bg-gray-100"></div>
+
         {/* 2. Total Spent So Far */}
-        <div className="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] p-6 sm:p-8 flex flex-col gap-2">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold uppercase text-slate-800 tracking-wider">
-              Total Spent So Far
+        <div className="flex flex-col gap-1 w-full xl:w-auto min-w-[140px]">
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-bold uppercase text-slate-400 tracking-wider">
+              Total Spent
             </span>
-            <Badge variant="primary" size="sm">
-              {spentPercent.toFixed(1)}% of Salary
-            </Badge>
+            <span className="text-[10px] font-bold bg-[#F6F5FB] text-slate-600 px-1.5 py-0.5 rounded-md whitespace-nowrap">
+              {spentPercent.toFixed(1)}% Used
+            </span>
           </div>
-          <span className="text-2xl font-semibold text-[#FF6B6B]">
+          <span className="text-2xl font-bold text-[#FF6B6B]">
             ৳{forecast.current_spent_bdt.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
           </span>
         </div>
 
+        <div className="hidden xl:block w-[1px] h-12 bg-gray-100"></div>
+
         {/* 3. Current In-Hand Balance */}
-        <div
-          className={`rounded-2xl p-4 shadow-sm flex flex-col gap-2 ${
-            netBalance >= 0 ? "bg-white" : "bg-white"
-          }`}
-        >
-          <span className="text-xs font-semibold uppercase text-slate-800 tracking-wider">
-            Current Balance (In-Hand)
+        <div className="flex flex-col gap-1 w-full xl:w-auto min-w-[140px]">
+          <span className="text-xs font-bold uppercase text-slate-400 tracking-wider">
+            Current Balance
           </span>
           <span
-            className={`text-2xl font-semibold ${
-              netBalance >= 0 ? "text-slate-800" : "text-[#FF6B6B]"
+            className={`text-2xl font-bold ${
+              netBalance >= 0 ? "text-[#00F0B5]" : "text-[#FF6B6B]"
             }`}
           >
             ৳{netBalance.toLocaleString("en-IN", { minimumFractionDigits: 2 })}

@@ -46,31 +46,28 @@ export const LargestExpenses: React.FC = () => {
                 className="bg-white rounded-2xl shadow-sm p-4 border border-gray-50 flex items-center justify-between flex-wrap gap-2 hover:bg-white transition-all"
               >
                 <div className="flex items-center gap-3">
-                  <span className="w-8 h-8 bg-[#EAE5F8] text-[#554089] font-bold text-xs flex items-center justify-center rounded-full border-none shadow-sm">
-                    #{idx + 1}
+                  <span className="w-6 h-6 bg-slate-100 text-slate-500 font-bold text-[10px] flex items-center justify-center rounded-full">
+                    {idx + 1}
                   </span>
                   <div className="flex flex-col">
                     <div className="flex items-center gap-2">
-                      <span className="font-semibold text-sm text-slate-800">{item.shop}</span>
+                      <span className="font-bold text-sm text-slate-800">{item.shop}</span>
                       {isRecurring && (
-                        <Badge variant="primary" size="sm" pill>
-                          <Repeat className="w-2.5 h-2.5 stroke-[3px]" /> Recurring
-                        </Badge>
+                        <span className="text-[9px] font-bold bg-[#E9E5F4] text-[#554089] px-1.5 py-0.5 rounded uppercase flex items-center gap-1">
+                          <Repeat className="w-2.5 h-2.5" /> Recurring
+                        </span>
                       )}
                     </div>
-                    <div className="flex items-center gap-3 text-xs font-bold text-slate-800">
-                      <span className="flex items-center gap-1">
-                        <Store className="w-3 h-3" /> {item.category}
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <Calendar className="w-3 h-3" /> {item.date}
-                      </span>
+                    <div className="flex items-center gap-2 text-[11px] font-semibold text-slate-400 uppercase tracking-wide">
+                      <span>{item.category}</span>
+                      <span className="text-gray-300">•</span>
+                      <span>{item.date}</span>
                     </div>
                   </div>
                 </div>
 
                 <div className="text-right">
-                  <span className="font-semibold text-base text-slate-800">
+                  <span className="font-bold text-base text-slate-800">
                     ৳{item.amount_bdt.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
                   </span>
                 </div>

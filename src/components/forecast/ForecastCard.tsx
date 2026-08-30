@@ -71,47 +71,47 @@ export const ForecastCard: React.FC = () => {
       </div>
 
       {/* Forecast Metric Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-4">
         {/* Daily Burn Rate */}
-        <div className="bg-white rounded-2xl shadow-sm p-4 border border-gray-50 flex flex-col gap-1">
-          <div className="flex items-center gap-1.5 text-xs font-semibold uppercase text-slate-800">
-            <Flame className="w-4 h-4 text-[#FF6B6B]" />
+        <div className="flex flex-col gap-1">
+          <div className="flex items-center gap-1.5 text-xs font-bold uppercase text-slate-400">
+            <Flame className="w-3.5 h-3.5 text-[#FF6B6B]" />
             <span>Daily Burn Rate</span>
           </div>
-          <span className="text-xl font-semibold text-slate-800">
+          <span className="text-lg font-bold text-slate-800">
             ৳{forecast.daily_burn_rate_bdt.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
-            <span className="text-xs font-bold text-slate-800">/day</span>
+            <span className="text-xs font-bold text-slate-400">/day</span>
           </span>
-          <span className="text-[11px] font-bold text-slate-800">
+          <span className="text-[10px] font-bold text-slate-400">
             Over past {forecast.elapsed_days} days
           </span>
         </div>
 
         {/* Expected Rest of Month Spending */}
-        <div className="bg-white rounded-2xl shadow-sm p-4 border border-gray-50 flex flex-col gap-1">
-          <div className="flex items-center gap-1.5 text-xs font-semibold uppercase text-slate-800">
-            <CalendarClock className="w-4 h-4 text-[#00E5FF]" />
+        <div className="flex flex-col gap-1 sm:border-l sm:border-gray-100 sm:pl-6">
+          <div className="flex items-center gap-1.5 text-xs font-bold uppercase text-slate-400">
+            <CalendarClock className="w-3.5 h-3.5 text-[#00F0B5]" />
             <span>Remaining Spending</span>
           </div>
-          <span className="text-xl font-semibold text-slate-800">
+          <span className="text-lg font-bold text-slate-800">
             ৳{forecast.projected_remaining_spend_bdt.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
           </span>
-          <span className="text-[11px] font-bold text-slate-800">
+          <span className="text-[10px] font-bold text-slate-400">
             For remaining {forecast.remaining_days} days
           </span>
         </div>
 
         {/* Total Projected Monthly Spend */}
-        <div className="bg-white rounded-2xl shadow-sm p-4 border border-gray-50 flex flex-col gap-1">
-          <div className="flex items-center gap-1.5 text-xs font-semibold uppercase text-slate-800">
-            <Coins className="w-4 h-4 text-[#FF9F1C]" />
+        <div className="flex flex-col gap-1 sm:border-l sm:border-gray-100 sm:pl-6">
+          <div className="flex items-center gap-1.5 text-xs font-bold uppercase text-slate-400">
+            <Coins className="w-3.5 h-3.5 text-[#FFB84C]" />
             <span>Total Month Spend</span>
           </div>
-          <span className="text-xl font-semibold text-slate-800">
+          <span className="text-lg font-bold text-slate-800">
             ৳{forecast.total_projected_spend_bdt.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
           </span>
-          <span className="text-[11px] font-bold text-slate-800">
-            Against ৳{forecast.salary_bdt.toLocaleString("en-IN")} salary
+          <span className="text-[10px] font-bold text-slate-400">
+            Against ৳{forecast.salary_bdt.toLocaleString("en-IN")}
           </span>
         </div>
       </div>

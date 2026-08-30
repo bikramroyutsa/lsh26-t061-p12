@@ -38,8 +38,34 @@ export const CategoryBreakdown: React.FC = () => {
     })
     .sort((a, b) => b.total - a.total);
 
+  // Limit to top 5, rest goes to "Other"
+  let finalCategories = [...sortedCategories];
+  if (sortedCategories.length > 6) {
+    const top5 = sortedCategories.slice(0, 5);
+    const others = sortedCategories.slice(5);
+    
+    const otherTotal = others.reduce((s, c) => s + c.total, 0);
+    const otherCount = others.reduce((s, c) => s + c.count, 0);
+    const otherPercentage = others.reduce((s, c) => s + c.percentage, 0);
+    const otherDeltaBdt = others.reduce((s, c) => s + c.delta_bdt, 0);
+    const otherDeltaPercentage = 0; // Weighted average is complex, so we leave it at 0 for simplicity
+
+    finalCategories = [
+      ...top5,
+      {
+        category: "Other",
+        total: roundHalfUp(otherTotal, 2),
+        count: otherCount,
+        percentage: roundHalfUp(otherPercentage, 1),
+        delta_bdt: roundHalfUp(otherDeltaBdt, 2),
+        delta_percentage: 0,
+      }
+    ];
+  }
+
   const getCategoryColor = (index: number) => {
-    const colors = ["#FFD93D", "#FF6B6B", "#00F0B5", "#C4B5FD", "#00E5FF", "#FF9F1C", "#FF70A6"];
+    // Soft SaaS and material pastels
+    const colors = ["#634E9F", "#FF6B6B", "#00F0B5", "#A093D6", "#FFB84C", "#B2B2B2"];
     return colors[index % colors.length];
   };
 
@@ -60,13 +86,13 @@ export const CategoryBreakdown: React.FC = () => {
       }
       headerBg="muted"
     >
-      {sortedCategories.length === 0 ? (
+      {finalCategories.length === 0 ? (
         <div className="text-center py-8 font-bold text-slate-800">
           No expenses recorded for {selectedMonth}.
         </div>
       ) : (
         <div className="flex flex-col gap-3.5">
-          {sortedCategories.map((item, idx) => {
+          {finalCategories.map((item, idx) => {
             const barBg = getCategoryColor(idx);
             return (
               <div
