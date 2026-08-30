@@ -2,8 +2,9 @@ import React from 'react';
 
 export interface BadgeProps {
   children: React.ReactNode;
-  variant?: 'info' | 'success' | 'warning' | 'error' | 'neutral' | 'primary' | 'outline';
+  variant?: 'info' | 'success' | 'warning' | 'error' | 'neutral' | 'primary' | 'outline' | 'secondary';
   size?: 'sm' | 'md' | 'lg';
+  pill?: boolean;
   className?: string;
 }
 
@@ -11,6 +12,7 @@ export const Badge: React.FC<BadgeProps> = ({
   children, 
   variant = 'neutral',
   size = 'md',
+  pill = true,
   className = ''
 }) => {
   const variantStyles: Record<string, string> = {
@@ -21,6 +23,7 @@ export const Badge: React.FC<BadgeProps> = ({
     neutral: 'bg-gray-50 text-gray-700 border-gray-200',
     primary: 'bg-indigo-50 text-indigo-700 border-indigo-200',
     outline: 'bg-transparent text-gray-700 border-gray-300',
+    secondary: 'bg-purple-50 text-purple-700 border-purple-200',
   };
 
   const sizeStyles: Record<string, string> = {
@@ -30,7 +33,7 @@ export const Badge: React.FC<BadgeProps> = ({
   };
 
   return (
-    <span className={`inline-flex items-center rounded-full font-medium border ${variantStyles[variant] ?? variantStyles.neutral} ${sizeStyles[size] ?? sizeStyles.md} ${className}`}>
+    <span className={`inline-flex items-center font-medium border ${pill ? 'rounded-full' : 'rounded'} ${variantStyles[variant] ?? variantStyles.neutral} ${sizeStyles[size] ?? sizeStyles.md} ${className}`}>
       {children}
     </span>
   );
