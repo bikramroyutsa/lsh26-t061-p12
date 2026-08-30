@@ -14,6 +14,7 @@ import {
   Plus,
   Sliders,
   Calendar,
+  LogOut,
 } from "lucide-react";
 
 export type NavTab = "notebook" | "dashboard" | "history" | "pockets" | "insights";
@@ -41,6 +42,7 @@ export const Navbar: React.FC<NavbarProps> = ({
     selectedMonth,
     setSelectedMonth,
     months,
+    signOut,
   } = useLedger();
 
   const navItems: { id: NavTab; label: string }[] = [
@@ -124,6 +126,13 @@ export const Navbar: React.FC<NavbarProps> = ({
               className="px-6 py-2.5 min-w-[140px] text-center bg-[#634E9F] text-white font-medium text-sm rounded-full hover:bg-[#524083] transition-colors"
             >
               What-If
+            </button>
+            <button
+              onClick={signOut}
+              className="p-2.5 ml-2 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-full transition-colors"
+              title="Sign Out"
+            >
+              <LogOut className="w-5 h-5" />
             </button>
           </div>
         </div>
