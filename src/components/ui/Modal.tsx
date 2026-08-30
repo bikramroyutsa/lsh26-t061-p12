@@ -6,9 +6,21 @@ export interface ModalProps {
   onClose: () => void;
   title: string;
   children: React.ReactNode;
+  /** Accepted for API compat — currently unused visually */
+  headerBg?: string;
+  /** Controls max width: 'sm' | 'md' | 'lg' | 'xl' | '2xl'. Defaults to 'lg'. */
+  maxWidth?: 'sm' | 'md' | 'lg' | 'xl' | '2xl' | string;
 }
 
-export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children }) => {
+const maxWidthClass: Record<string, string> = {
+  sm: 'max-w-sm',
+  md: 'max-w-md',
+  lg: 'max-w-lg',
+  xl: 'max-w-xl',
+  '2xl': 'max-w-2xl',
+};
+
+export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children, headerBg: _headerBg, maxWidth = 'lg' }) => {
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
@@ -32,7 +44,7 @@ export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children }
       
       {/* Modal Box */}
       <div 
-        className="relative bg-white rounded-[2rem] shadow-[0_20px_60px_rgb(0,0,0,0.08)] w-full max-w-lg mx-auto overflow-hidden animate-in fade-in zoom-in-95 duration-200"
+        className={`relative bg-white rounded-[2rem] shadow-[0_20px_60px_rgb(0,0,0,0.08)] w-full ${maxWidthClass[maxWidth] ?? 'max-w-lg'} mx-auto overflow-hidden animate-in fade-in zoom-in-95 duration-200`}
         role="dialog"
         aria-modal="true"
       >

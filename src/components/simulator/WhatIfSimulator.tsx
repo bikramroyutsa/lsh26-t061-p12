@@ -75,7 +75,7 @@ export const WhatIfSimulator: React.FC<WhatIfSimulatorProps> = ({
               max={100}
               step={5}
               valueFormatter={(v) => `${v}% CUT`}
-              onChange={(newVal) => setWhatIf(whatIfCategory, newVal)}
+              onChange={(e) => setWhatIf(whatIfCategory, Number((e as React.ChangeEvent<HTMLInputElement>).target.value))}
             />
           </div>
         </div>
