@@ -1,18 +1,18 @@
 "use client";
 
 import React, { createContext, useContext, useState, useMemo, useEffect } from "react";
-import { Expense, MoMComparison, CategoryBreakdownItem } from "@/types/expense";
+import { Expense, MoMComparison, CategoryBreakdownItem, ShorthandCommand } from "@/types/expense";
 import { SavingsPocket, DPSCalculationResult } from "@/types/pocket";
 import { ForecastResult } from "@/types/forecast";
 import { ConcreteInsight } from "@/types/insights";
 import { WhatIfResult } from "@/types/whatIf";
-import { getAllCases, parseCaseData } from "@/lib/dataset/loader";
 import { calculateDPS, roundHalfUp } from "@/lib/calculations/dps";
 import { calculateForecast, calculatePocketCompletion } from "@/lib/calculations/forecast";
 import { detectRecurringExpenses, RecurringMatch } from "@/lib/calculations/recurring";
 import { simulateCategoryCut } from "@/lib/calculations/whatIf";
 import { generateDynamicInsights } from "@/lib/calculations/insights";
 import { CompetitionCase } from "@/types/dataset";
+import { createClient } from "@/lib/supabase/client";
 
 interface LedgerContextType {
   // State
@@ -21,6 +21,7 @@ interface LedgerContextType {
   salary: number;
   expenses: Expense[];
   pockets: SavingsPocket[];
+  shorthands: ShorthandCommand[];
   todayDate: string;
   months: { last: string; this: string };
   selectedMonth: string;
@@ -28,6 +29,7 @@ interface LedgerContextType {
   dpsRule: string;
   whatIfCategory: string;
   whatIfCutPercent: number;
+  userId: string | null;
 
   // Derived calculations
   forecast: ForecastResult;
@@ -56,51 +58,91 @@ interface LedgerContextType {
   updatePocketContribution: (id: string, contribution: number) => void;
   deletePocket: (id: string) => void;
   setWhatIf: (category: string, cutPercent: number) => void;
+  addShorthand: (command: Omit<ShorthandCommand, "id">) => void;
+  deleteShorthand: (id: string) => void;
+  signOut: () => Promise<void>;
 }
 
 const LedgerContext = createContext<LedgerContextType | undefined>(undefined);
 
 export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const availableCases = useMemo(() => getAllCases(), []);
-
-  // Initialize with PUB-01 or fallback
-  const initialCase = availableCases[0];
-  const initialParsed = initialCase ? parseCaseData(initialCase) : null;
-
-  const [activeCaseId, setActiveCaseId] = useState<string>(initialCase?.case_id || "PUB-01");
-  const [salary, setSalary] = useState<number>(initialParsed?.salary || 50000);
-  const [expenses, setExpenses] = useState<Expense[]>(initialParsed?.expenses || []);
-  const [pockets, setPockets] = useState<SavingsPocket[]>(initialParsed?.pockets || []);
-  const [todayDate, setTodayDate] = useState<string>(initialParsed?.today || "2026-04-17");
-  const [months, setMonths] = useState<{ last: string; this: string }>(
-    initialParsed?.months || { last: "2026-03", this: "2026-04" }
-  );
-  const [selectedMonth, setSelectedMonth] = useState<string>(initialParsed?.months.this || "2026-04");
-  const [dpsRate, setDPSRate] = useState<number>(initialParsed?.dpsRate || 9.0);
-  const [dpsRule, setDPSRule] = useState<string>(
-    initialParsed?.dpsRule || "Annual rate as stated. Compounded monthly."
-  );
-
-  // What-If Simulation State
+  const supabase = createClient();
+  const [userId, setUserId] = useState<string | null>(null);
+  
+  const [activeCaseId, setActiveCaseId] = useState<string>("");
+  const [salary, setSalary] = useState<number>(0);
+  const [expenses, setExpenses] = useState<Expense[]>([]);
+  const [pockets, setPockets] = useState<SavingsPocket[]>([]);
+  const [shorthands, setShorthands] = useState<ShorthandCommand[]>([]);
+  
+  const [todayDate, setTodayDate] = useState<string>(new Date().toISOString().split("T")[0]);
+  const [months, setMonths] = useState<{ last: string; this: string }>({ last: "2026-07", this: "2026-08" });
+  const [selectedMonth, setSelectedMonth] = useState<string>("2026-08");
+  const [dpsRate, setDPSRate] = useState<number>(8.0);
+  const [dpsRule, setDPSRule] = useState<string>("Annual rate as stated. Compounded monthly.");
+  
   const [whatIfCategory, setWhatIfCategory] = useState<string>("Food");
   const [whatIfCutPercent, setWhatIfCutPercent] = useState<number>(0);
 
+  // Load Cloud Data
+  useEffect(() => {
+    const fetchSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session?.user) {
+        setUserId(session.user.id);
+        loadCloudData(session.user.id);
+      } else {
+        if (window.location.pathname !== "/login") {
+          window.location.href = "/login";
+        }
+      }
+    };
+
+    fetchSession();
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session?.user) {
+        setUserId(session.user.id);
+        loadCloudData(session.user.id);
+      } else {
+        setUserId(null);
+        if (window.location.pathname !== "/login") {
+          window.location.href = "/login";
+        }
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const loadCloudData = async (uid: string) => {
+    // Fetch profile
+    const { data: profile } = await supabase.from('user_profiles').select('*').eq('id', uid).single();
+    if (profile) {
+      setSalary(Number(profile.salary_bdt));
+      setDPSRate(Number(profile.dps_rate));
+    }
+
+    // Fetch expenses
+    const { data: exps } = await supabase.from('expenses').select('*').order('date', { ascending: false });
+    if (exps) setExpenses(exps as any);
+
+    // Fetch pockets
+    const { data: pocks } = await supabase.from('savings_pockets').select('*');
+    if (pocks) setPockets(pocks as any);
+
+    // Fetch shorthands
+    const { data: shs } = await supabase.from('shorthands').select('*');
+    if (shs) setShorthands(shs as any);
+  };
+
+  const signOut = async () => {
+    await supabase.auth.signOut();
+  };
+
   // Load a competition case
   const loadCase = (caseId: string) => {
-    const targetCase = availableCases.find((c) => c.case_id === caseId);
-    if (!targetCase) return;
-
-    const parsed = parseCaseData(targetCase);
-    setActiveCaseId(caseId);
-    setSalary(parsed.salary);
-    setExpenses(parsed.expenses);
-    setPockets(parsed.pockets);
-    setTodayDate(parsed.today);
-    setMonths(parsed.months);
-    setSelectedMonth(parsed.months.this);
-    setDPSRate(parsed.dpsRate);
-    setDPSRule(parsed.dpsRule);
-    setWhatIfCutPercent(0);
+    // We disable this now that we are on cloud, but keep signature for types
   };
 
   // 1. FORECAST CALCULATION
@@ -124,18 +166,12 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     const delta = thisTotal - lastTotal;
     const deltaPercent = lastTotal > 0 ? (delta / lastTotal) * 100 : 0;
 
-    // Category changes
     const allCategories = Array.from(new Set(expenses.map((e) => e.category)));
     const categoryChanges = allCategories.map((cat) => {
-      const lastCat = lastMonthExps
-        .filter((e) => e.category === cat)
-        .reduce((s, e) => s + e.amount_bdt, 0);
-      const thisCat = thisMonthExps
-        .filter((e) => e.category === cat)
-        .reduce((s, e) => s + e.amount_bdt, 0);
+      const lastCat = lastMonthExps.filter((e) => e.category === cat).reduce((s, e) => s + e.amount_bdt, 0);
+      const thisCat = thisMonthExps.filter((e) => e.category === cat).reduce((s, e) => s + e.amount_bdt, 0);
       const catDelta = thisCat - lastCat;
       const catDeltaPercent = lastCat > 0 ? (catDelta / lastCat) * 100 : thisCat > 0 ? 100 : 0;
-
       return {
         category: cat,
         last_bdt: roundHalfUp(lastCat, 2),
@@ -159,7 +195,6 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   // 4. SAVINGS POCKETS PROJECTIONS & DPS CALCULATIONS
   const pocketsWithProjections = useMemo(() => {
     const totalCommitment = pockets.reduce((s, p) => s + p.monthly_contribution_bdt, 0);
-
     return pockets.map((pocket) => {
       const completion = calculatePocketCompletion(pocket, forecast, totalCommitment);
       const dpsResult = calculateDPS(
@@ -167,14 +202,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         completion.monthsToComplete === 999 ? 12 : Math.min(120, completion.monthsToComplete),
         dpsRate
       );
-
-      return {
-        ...pocket,
-        calculatedCompletionDate: completion.completionDate,
-        calculatedMonths: completion.monthsToComplete,
-        isSurplusConstrained: completion.isSurplusConstrained,
-        dpsResult,
-      };
+      return { ...pocket, calculatedCompletionDate: completion.completionDate, calculatedMonths: completion.monthsToComplete, isSurplusConstrained: completion.isSurplusConstrained, dpsResult };
     });
   }, [pockets, forecast, dpsRate]);
 
@@ -189,65 +217,88 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     return generateDynamicInsights(expenses, forecast, momComparison, pockets, recurringMatches);
   }, [expenses, forecast, momComparison, pockets, recurringMatches]);
 
-  // ACTION HANDLERS
-  const addExpense = (newExp: Omit<Expense, "id">) => {
-    const id = `E-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
-    setExpenses((prev) => [
-      {
-        ...newExp,
-        id,
-        amount_bdt: roundHalfUp(newExp.amount_bdt, 2),
-      },
-      ...prev,
-    ]);
+
+  // CLOUD MUTATIONS
+  const handleSetSalary = async (newSalary: number) => {
+    if (!userId) return;
+    setSalary(newSalary);
+    await supabase.from('user_profiles').update({ salary_bdt: newSalary }).eq('id', userId);
   };
 
-  const updateExpense = (id: string, updated: Partial<Expense>) => {
-    setExpenses((prev) =>
-      prev.map((e) =>
-        e.id === id
-          ? {
-              ...e,
-              ...updated,
-              amount_bdt:
-                updated.amount_bdt !== undefined
-                  ? roundHalfUp(updated.amount_bdt, 2)
-                  : e.amount_bdt,
-            }
-          : e
-      )
-    );
+  const handleAddExpense = async (newExp: Omit<Expense, "id">) => {
+    if (!userId) return;
+    const expenseData = {
+      user_id: userId,
+      date: newExp.date,
+      category: newExp.category,
+      shop: newExp.shop,
+      amount_bdt: roundHalfUp(newExp.amount_bdt, 2),
+      notes: newExp.notes || null
+    };
+    
+    // Optimistic Update
+    const tempId = `temp-${Date.now()}`;
+    setExpenses(prev => [{ ...newExp, id: tempId, amount_bdt: expenseData.amount_bdt }, ...prev]);
+    
+    const { data, error } = await supabase.from('expenses').insert(expenseData).select().single();
+    if (data) {
+      setExpenses(prev => prev.map(e => e.id === tempId ? data as any : e));
+    }
   };
 
-  const deleteExpense = (id: string) => {
-    setExpenses((prev) => prev.filter((e) => e.id !== id));
+  const handleUpdateExpense = async (id: string, updated: Partial<Expense>) => {
+    setExpenses(prev => prev.map(e => e.id === id ? { ...e, ...updated, amount_bdt: updated.amount_bdt !== undefined ? roundHalfUp(updated.amount_bdt, 2) : e.amount_bdt } : e));
+    await supabase.from('expenses').update({ ...updated }).eq('id', id);
   };
 
-  const addPocket = (newPocket: Omit<SavingsPocket, "id">) => {
-    const id = `SP-${Date.now()}`;
-    setPockets((prev) => [
-      ...prev,
-      {
-        ...newPocket,
-        id,
-        target_bdt: roundHalfUp(newPocket.target_bdt, 2),
-        monthly_contribution_bdt: roundHalfUp(newPocket.monthly_contribution_bdt, 2),
-      },
-    ]);
+  const handleDeleteExpense = async (id: string) => {
+    setExpenses(prev => prev.filter(e => e.id !== id));
+    await supabase.from('expenses').delete().eq('id', id);
   };
 
-  const updatePocketContribution = (id: string, contribution: number) => {
-    setPockets((prev) =>
-      prev.map((p) =>
-        p.id === id
-          ? { ...p, monthly_contribution_bdt: Math.max(0, roundHalfUp(contribution, 2)) }
-          : p
-      )
-    );
+  const handleAddPocket = async (newPocket: Omit<SavingsPocket, "id">) => {
+    if (!userId) return;
+    const pocketData = {
+      user_id: userId,
+      name: newPocket.name,
+      item: newPocket.item,
+      target_bdt: roundHalfUp(newPocket.target_bdt, 2),
+      monthly_contribution_bdt: roundHalfUp(newPocket.monthly_contribution_bdt, 2),
+      current_balance_bdt: 0
+    };
+    
+    const tempId = `temp-${Date.now()}`;
+    setPockets(prev => [...prev, { ...newPocket, id: tempId, target_bdt: pocketData.target_bdt, monthly_contribution_bdt: pocketData.monthly_contribution_bdt, current_balance_bdt: 0 }]);
+    
+    const { data } = await supabase.from('savings_pockets').insert(pocketData).select().single();
+    if (data) setPockets(prev => prev.map(p => p.id === tempId ? data as any : p));
   };
 
-  const deletePocket = (id: string) => {
-    setPockets((prev) => prev.filter((p) => p.id !== id));
+  const handleUpdatePocketContribution = async (id: string, contribution: number) => {
+    const val = Math.max(0, roundHalfUp(contribution, 2));
+    setPockets(prev => prev.map(p => p.id === id ? { ...p, monthly_contribution_bdt: val } : p));
+    await supabase.from('savings_pockets').update({ monthly_contribution_bdt: val }).eq('id', id);
+  };
+
+  const handleDeletePocket = async (id: string) => {
+    setPockets(prev => prev.filter(p => p.id !== id));
+    await supabase.from('savings_pockets').delete().eq('id', id);
+  };
+
+  const handleAddShorthand = async (command: Omit<ShorthandCommand, "id">) => {
+    if (!userId) return;
+    const dataObj = { user_id: userId, keyword: command.keyword, category: command.category, shop: command.shop };
+    
+    const tempId = `temp-${Date.now()}`;
+    setShorthands(prev => [...prev, { ...command, id: tempId }]);
+    
+    const { data } = await supabase.from('shorthands').insert(dataObj).select().single();
+    if (data) setShorthands(prev => prev.map(sh => sh.id === tempId ? data as any : sh));
+  };
+
+  const handleDeleteShorthand = async (id: string) => {
+    setShorthands(prev => prev.filter(sh => sh.id !== id));
+    await supabase.from('shorthands').delete().eq('id', id);
   };
 
   const setWhatIf = (category: string, cutPercent: number) => {
@@ -259,10 +310,11 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     <LedgerContext.Provider
       value={{
         activeCaseId,
-        availableCases,
+        availableCases: [], // Deprecated
         salary,
         expenses,
         pockets,
+        shorthands,
         todayDate,
         months,
         selectedMonth,
@@ -270,6 +322,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         dpsRule,
         whatIfCategory,
         whatIfCutPercent,
+        userId,
         forecast,
         momComparison,
         recurringMatches,
@@ -278,17 +331,20 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         whatIfResult,
         pocketsWithProjections,
         loadCase,
-        setSalary,
+        setSalary: handleSetSalary,
         setTodayDate,
         setSelectedMonth,
         setDPSRate,
-        addExpense,
-        updateExpense,
-        deleteExpense,
-        addPocket,
-        updatePocketContribution,
-        deletePocket,
+        addExpense: handleAddExpense,
+        updateExpense: handleUpdateExpense,
+        deleteExpense: handleDeleteExpense,
+        addPocket: handleAddPocket,
+        updatePocketContribution: handleUpdatePocketContribution,
+        deletePocket: handleDeletePocket,
         setWhatIf,
+        addShorthand: handleAddShorthand,
+        deleteShorthand: handleDeleteShorthand,
+        signOut,
       }}
     >
       {children}
@@ -298,8 +354,6 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
 export function useLedger() {
   const context = useContext(LedgerContext);
-  if (!context) {
-    throw new Error("useLedger must be used within a LedgerProvider");
-  }
+  if (!context) throw new Error("useLedger must be used within a LedgerProvider");
   return context;
 }

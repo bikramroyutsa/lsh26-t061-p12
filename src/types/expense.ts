@@ -11,6 +11,13 @@ export type ExpenseCategory =
   | "Entertainment"
   | "Other";
 
+export interface ShorthandCommand {
+  id: string;
+  keyword: string;
+  category: ExpenseCategory | string;
+  shop: string;
+}
+
 export interface Expense {
   id: string;
   date: string; // YYYY-MM-DD
