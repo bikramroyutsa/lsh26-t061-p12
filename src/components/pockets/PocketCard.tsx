@@ -25,23 +25,17 @@ export const PocketCard: React.FC<PocketCardProps> = ({ pocket }) => {
 
   return (
     <>
-      <Card
-        variant="outline"
-        shadow="md"
-        hoverLift
-        header={
-          <div className="flex items-center justify-between w-full">
-            <div className="flex items-center gap-2">
-              <Target className="w-5 h-5 stroke-[2.5px]" />
-              <span>{pocket.name}</span>
-            </div>
-            <Badge variant="primary" size="sm">
-              {pocket.item}
-            </Badge>
+      <Card>
+        {/* Card header row */}
+        <div className="flex items-center justify-between w-full mb-4">
+          <div className="flex items-center gap-2">
+            <Target className="w-5 h-5 stroke-[2.5px]" />
+            <span className="font-semibold">{pocket.name}</span>
           </div>
-        }
-        headerBg="secondary"
-      >
+          <Badge variant="neutral" size="sm">
+            {pocket.item}
+          </Badge>
+        </div>
         <div className="flex flex-col gap-4">
           {/* Target & Forecast Completion Banner */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -89,7 +83,7 @@ export const PocketCard: React.FC<PocketCardProps> = ({ pocket }) => {
               max={Math.max(50000, pocket.target_bdt)}
               step={500}
               valueFormatter={(v) => `৳${v.toLocaleString("en-IN")}/mo`}
-              onChange={(newVal) => updatePocketContribution(pocket.id, newVal)}
+              onChange={(e) => updatePocketContribution(pocket.id, Number((e as React.ChangeEvent<HTMLInputElement>).target.value))}
               helperText="Drag slider to instantly shift completion date"
             />
           </div>
@@ -111,7 +105,7 @@ export const PocketCard: React.FC<PocketCardProps> = ({ pocket }) => {
             </div>
 
             <Button
-              variant="muted"
+              variant="outline"
               size="sm"
               onClick={() => setIsDPSModalOpen(true)}
             >

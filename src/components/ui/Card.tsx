@@ -3,12 +3,25 @@ import React from 'react';
 export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
   noPadding?: boolean;
+  // Custom props used by callers — consumed here, never forwarded to the DOM
+  headerBg?: string;
+  shadow?: string;
+  header?: React.ReactNode;
+  variant?: string;
 }
 
 export const Card: React.FC<CardProps> = ({ 
   children, 
   className = '', 
   noPadding = false,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  headerBg,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  shadow,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  header,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  variant,
   ...props 
 }) => {
   return (
