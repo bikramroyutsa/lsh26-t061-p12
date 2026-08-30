@@ -1,0 +1,110 @@
+{
+  "release_version": "2.2",
+  "team_id": "LSH26-T061",
+  "problem_id": "P12",
+  "repository_name": "lsh26-t061-p12",
+  "live_url": "https://lsh26-t061-p12.vercel.app",
+  "demo_video_url_optional": "",
+  "event_start_code": "LSH26-8490-C900",
+  "repository_created_before_release": false,
+  "pre_event_materials": [],
+  "sample_data": {
+    "loads_published_fixture": true,
+    "method": "seeded on start | file upload | typed entry",
+    "reset_instructions": "Select any of the 25 official benchmark cases (PUB-01 to PUB-25) from the Case Selector at the top of the dashboard to instantly load data, or reset via local storage."
+  },
+  "problem_solving_method": "Built a comprehensive personal ledger web application utilizing Next.js App Router and reactive state management. Implemented multi-modal expense capture (structured typed notebook with autocomplete and Gemini OCR for receipt/bill parsing with uncertainty detection), daily burn-rate forecasting for month-end surplus/deficit projection, dynamic concrete written insights naming specific categories/amounts, savings pockets with forecast-constrained completion timelines, and Bangladesh bank standard compound DPS interest engine.",
+  "requirements": {
+    "R1": {
+      "status": "complete",
+      "evidence": "src/components/ocr/ReceiptUploadModal.tsx, src/components/notebook/NotebookInput.tsx, src/app/api/ocr/route.ts"
+    },
+    "R2": {
+      "status": "complete",
+      "evidence": "src/components/dashboard/SalaryOverview.tsx, src/components/dashboard/CategoryBreakdown.tsx, src/components/dashboard/MonthlyComparison.tsx"
+    },
+    "R3": {
+      "status": "complete",
+      "evidence": "src/components/forecast/ForecastCard.tsx, src/components/forecast/WrittenInsights.tsx, src/lib/calculations/forecast.ts"
+    },
+    "R4": {
+      "status": "complete",
+      "evidence": "src/components/pockets/PocketList.tsx, src/components/pockets/DPSBreakdownModal.tsx, src/components/simulator/WhatIfSimulator.tsx"
+    }
+  },
+  "team_members": [
+    {
+      "registered_name": "Bikram Roy Utsa",
+      "github_username": "bikramroyutsa",
+      "major_contribution": "Implemented Gemini Vision OCR route with multi-key rotation for receipt parsing, build stabilization, and TypeScript type soundness across all components.",
+      "evidence_paths_or_commits": [
+        "src/app/api/ocr/route.ts",
+        "src/components/ocr/ReceiptUploadModal.tsx",
+        "src/components/ui/Card.tsx",
+        "src/components/ui/Slider.tsx",
+        "src/components/pockets/PocketCard.tsx"
+      ]
+    },
+    {
+      "registered_name": "Saeed Ahmed Mahin",
+      "github_username": "SaeedAhmedMahin",
+      "major_contribution": "Implemented Core calculations (DPS compounding engine, burn-rate forecaster, written insight generator, recurring expense detector, what-if simulator), notebook parser with autocomplete, and state management.",
+      "evidence_paths_or_commits": [
+        "src/lib/calculations/dps.ts",
+        "src/lib/calculations/forecast.ts",
+        "src/lib/calculations/insights.ts",
+        "src/lib/calculations/recurring.ts",
+        "src/lib/calculations/whatIf.ts",
+        "src/components/notebook/NotebookInput.tsx",
+        "src/context/LedgerContext.tsx"
+      ]
+    },
+    {
+      "registered_name": "Rakinuzzaman",
+      "github_username": "rakinthegreat",
+      "major_contribution": "Developed cohesive Material Design UI styling system, responsive dashboard layout, component polishing, and interactive simulation widgets.",
+      "evidence_paths_or_commits": [
+        "src/app/globals.css",
+        "src/app/page.tsx",
+        "src/components/dashboard/CategoryBreakdown.tsx",
+        "src/components/dashboard/SalaryOverview.tsx",
+        "src/components/forecast/ForecastCard.tsx",
+        "src/components/ui/Badge.tsx"
+      ]
+    }
+  ],
+  "major_design_decisions": [
+    "Engineered DPS compound interest calculator strictly following Bangladesh banking standards (monthly deposit compounding with explicit interest rates).",
+    "Derived savings pocket completion dates directly from live rest-of-month surplus capacity rather than naive division.",
+    "Integrated real Gemini Vision OCR with multi-key rotation and uncertainty flagging alongside simulated fallback for offline reliability.",
+    "Designed high-efficiency dual-mode input: structured notebook parser with autocomplete and standard modal form."
+  ],
+  "known_limitations": [
+    "Receipt OCR accuracy depends on image clarity and lighting conditions on camera captures.",
+    "Multi-user ledger synchronization is currently scoped to browser local storage and active sessions."
+  ],
+  "ai_tools_used": [
+    {
+      "tool": "Gemini 3.7 Flash",
+      "used_for": "Code generation, UI component structuring, reactive state flow design, and refactoring",
+      "how_output_was_verified": "Manual code review, interactive UI validation in browser, and test case execution"
+    },
+    {
+      "tool": "Gemini 3.6 Flash / 3.5 Flash",
+      "used_for": "Boilerplate scaffolding, data validation helpers, and mock receipt generation",
+      "how_output_was_verified": "Linting checks, dataset schema verification, and browser testing"
+    },
+    {
+      "tool": "Gemini 3.1 Pro",
+      "used_for": "Mathematical formula derivation, OCR integration, and algorithmic calculation logic",
+      "how_output_was_verified": "Validated mathematical output against manual calculations and official benchmark fixtures"
+    },
+    {
+      "tool": "Claude Sonnet 4.6",
+      "used_for": "Architecture planning, design system tokens, documentation generation, and bug fixing",
+      "how_output_was_verified": "TypeScript type-checking, linter validation, and manual runtime testing"
+    }
+  ],
+  "licenses_file": "LICENSES.md",
+  "declaration": "The information above is complete and truthful to the best of the team's knowledge."
+}
