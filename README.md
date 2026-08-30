@@ -3,12 +3,13 @@
 > **Team ID:** `LSH26-T061`  
 > **Problem ID:** `P12`  
 > **Repository:** `lsh26-t061-p12`  
+> **Live URL:** [https://lsh26-t061-p12.vercel.app](https://lsh26-t061-p12.vercel.app)  
 > **Design Theme:** Material
-> **Framework:** Next.js (App Router, TypeScript, React 19)
+> **Framework:** Next.js 15 (App Router, TypeScript, React 19)
 
 ---
 
-## 📌 Problem Overview & Context
+## Problem Overview & Context
 
 A salaried professional living and working in Dhaka receives a steady paycheck every month, but struggles to track where their money actually goes. Expenses are scattered across paper cash memos (groceries from Meena Bazar, Agora, Aarong), utility bills (DESCO, Dhaka WASA), mobile recharges (GP, Robi, Banglalink), and screenshots of mobile financial services (bKash, Nagad). Typically, spending reviews only happen on the final day of the month when funds have already run dry and corrective action is impossible.
 
@@ -28,7 +29,39 @@ The **Personal Ledger Manager** provides:
 
 ---
 
-## 🧮 Mathematical & Financial Formulas
+## Problem-Solving Method
+
+Our team approached the personal ledger challenge with a principled financial model tailored to Dhaka salaried life:
+1. **Multi-Modal Data Ingestion:** Built dual entry mechanisms — a high-speed text notebook parser with live autocomplete and an intelligent Gemini Vision OCR scanner that extracts date, merchant, category, and total with confidence tagging.
+2. **Dynamic Burn-Rate Forecasting:** Applied statistical daily burn-rate extrapolation ($S_{remaining} = \frac{S_{elapsed}}{d} \times (D - d)$) to predict month-end net balance accurately before month-end.
+3. **Actionable Concrete Written Insights:** Replaced vague advice with deterministic text generators analyzing largest categories, highest transactions, and remaining budget to provide exact numbers and merchant names.
+4. **Surplus-Constrained Savings & DPS:** Bound savings pocket completion dates to actual forecast surplus rather than naive goal division, and engineered a monthly compounding DPS engine per Bangladesh Bank standards.
+5. **Scenario Simulation:** Implemented a reactive What-If scenario engine allowing users to simulate category cuts and view instant savings date accelerations.
+
+---
+
+## Registered Team Members & Contributions
+
+| Member Name | GitHub Username | Major Contribution | Evidence Paths |
+|---|---|---|---|
+| **Bikram Roy Utsa** | `@bikramroyutsa` | Implemented Gemini Vision OCR route with multi-key rotation for receipt parsing, build stabilization, and TypeScript type soundness across all components. | `src/app/api/ocr/route.ts`, `src/components/ocr/ReceiptUploadModal.tsx`, `src/components/ui/Card.tsx`, `src/components/ui/Slider.tsx`, `src/components/pockets/PocketCard.tsx` |
+| **Saeed Ahmed Mahin** | `@SaeedAhmedMahin` | Implemented Core calculations (DPS compounding engine, burn-rate forecaster, written insight generator, recurring expense detector, what-if simulator), notebook parser with autocomplete, and state management. | `src/lib/calculations/dps.ts`, `src/lib/calculations/forecast.ts`, `src/lib/calculations/insights.ts`, `src/lib/calculations/recurring.ts`, `src/lib/calculations/whatIf.ts`, `src/components/notebook/NotebookInput.tsx`, `src/context/LedgerContext.tsx` |
+| **Rakinuzzaman** | `@rakinthegreat` | Developed cohesive Material Design UI styling system, responsive dashboard layout, component polishing, and interactive simulation widgets. | `src/app/globals.css`, `src/app/page.tsx`, `src/components/dashboard/CategoryBreakdown.tsx`, `src/components/dashboard/SalaryOverview.tsx`, `src/components/forecast/ForecastCard.tsx`, `src/components/ui/Badge.tsx` |
+
+---
+
+## Requirement Proof & Traceability
+
+| Requirement | Description | Status | Evidence Paths |
+|---|---|---|---|
+| **R1** | **Frictionless Expense Entry & Receipt OCR:** Receipt/bill upload, uncertainty highlighting, full editability, notebook typing with autocomplete, and category tagging. | **Complete** | `src/components/ocr/ReceiptUploadModal.tsx`, `src/components/notebook/NotebookInput.tsx`, `src/app/api/ocr/route.ts` |
+| **R2** | **Monthly Dashboard & MoM Comparison:** Total spent vs. salary, category breakdown, largest expenses, MoM change deltas. | **Complete** | `src/components/dashboard/SalaryOverview.tsx`, `src/components/dashboard/CategoryBreakdown.tsx`, `src/components/dashboard/MonthlyComparison.tsx` |
+| **R3** | **Dynamic Forecast & Written Insights:** Rest-of-month spending burn-rate prediction, surplus/deficit forecasting, and concrete Dhaka-specific written insights with exact numbers. | **Complete** | `src/components/forecast/ForecastCard.tsx`, `src/components/forecast/WrittenInsights.tsx`, `src/lib/calculations/forecast.ts` |
+| **R4** | **Savings Pockets & Compound DPS:** Goal-oriented pockets, forecast-derived completion dates, Bangladesh bank compound monthly DPS interest with explicit rates. | **Complete** | `src/components/pockets/PocketList.tsx`, `src/components/pockets/DPSBreakdownModal.tsx`, `src/components/simulator/WhatIfSimulator.tsx` |
+
+---
+
+## Mathematical & Financial Formulas
 
 ### 1. DPS (Deposit Pension Scheme) Compound Interest Calculation
 As defined by Bangladesh bank standards and the competition specification:
@@ -72,22 +105,24 @@ Cutting category $K$ by $P\%$ ($0 \le P \le 100$):
 
 ---
 
-## 🏗️ 100% Modular Architecture & Directory Tree
+## 100% Modular Architecture & Directory Tree
 
 ```
 lsh26-t061-p12/
 ├── EVENT.md                             # Official competition event record
 ├── README.md                            # Comprehensive system documentation
-├── TODO.md                              # Modular step-by-step roadmap
+├── LICENSES.md                          # Third-party licenses & AI disclosure
+├── evaluation-manifest.json             # Official evaluation manifest
 ├── P12_personal_ledger_public.json      # Official dataset (25 public test cases)
 ├── package.json                         # Dependencies & scripts
 ├── tsconfig.json                        # TypeScript configuration
 ├── next.config.ts                       # Next.js configuration
 ├── src/
 │   ├── app/                             # Next.js App Router
-│   │   ├── layout.tsx                   # Root layout (Neo-Brutalist typography & shell)
+│   │   ├── api/ocr/route.ts             # Gemini Vision OCR API endpoint
+│   │   ├── layout.tsx                   # Root layout (Material typography & shell)
 │   │   ├── page.tsx                     # Main Ledger Application Dashboard
-│   │   └── globals.css                  # Global styles & Neo-Brutalist design tokens
+│   │   └── globals.css                  # Global styles & Material design tokens
 │   │
 │   ├── types/                           # Strict TypeScript Domain Definitions
 │   │   ├── index.ts                     # Barrel export for all types
@@ -98,7 +133,7 @@ lsh26-t061-p12/
 │   │   ├── whatIf.ts                    # What-If scenario simulation types
 │   │   └── dataset.ts                   # Competition JSON schema types
 │   │
-│   ├── lib/                             # Pure Core Business Logic (100% Unit Tested)
+│   ├── lib/                             # Pure Core Business Logic
 │   │   ├── calculations/
 │   │   │   ├── dps.ts                   # DPS monthly compounding & return calculator
 │   │   │   ├── forecast.ts              # Burn-rate & rest-of-month projection engine
@@ -107,8 +142,7 @@ lsh26-t061-p12/
 │   │   │   └── whatIf.ts                # Category cut scenario simulator
 │   │   │
 │   │   ├── ocr/
-│   │   │   ├── receiptParser.ts         # Bangladeshi receipt & bill parser with confidence
-│   │   │   └── types.ts                 # OCR extraction interfaces & uncertainty flags
+│   │   │   └── receiptParser.ts         # Bangladeshi receipt & bill parser with confidence
 │   │   │
 │   │   ├── dataset/
 │   │   │   ├── loader.ts                # Competition case loader (PUB-01 to PUB-25)
@@ -120,51 +154,21 @@ lsh26-t061-p12/
 │   ├── context/                         # Reactive State Management
 │   │   └── LedgerContext.tsx            # Global ledger state provider & dispatchers
 │   │
-│   └── components/                      # Modular UI Components (Neo-Brutalism)
-│       ├── ui/                          # Reusable Neo-Brutalist primitives
-│       │   ├── Button.tsx               # High-contrast action button with crisp shadow
-│       │   ├── Card.tsx                 # Solid-bordered container with box-shadow
-│       │   ├── Input.tsx                # Styled inputs with bold outlines
-│       │   ├── Modal.tsx                # Accessible backdrop dialog
-│       │   ├── Slider.tsx               # Interactive range input with live tick labels
-│       │   ├── Badge.tsx                # Category & status pills
-│       │   └── ProgressBar.tsx          # High-visibility budget & goal progress bars
-│       │
-│       ├── dataset/                     # Official Benchmark Runner
-│       │   └── CaseSelector.tsx         # Instant switcher for 25 competition test cases
-│       │
-│       ├── dashboard/                   # Primary Metric & Visual Overview
-│       │   ├── SalaryOverview.tsx       # Salary setter, total spent, & remaining balance
-│       │   ├── CategoryBreakdown.tsx    # Visual category distribution & percentage
-│       │   ├── LargestExpenses.tsx      # Top ranked spending items with merchant info
-│       │   └── MonthlyComparison.tsx    # Last month vs. this month delta breakdown
-│       │
-│       ├── ocr/                         # Receipt Upload & Intelligent OCR
-│       │   ├── ReceiptUploadModal.tsx   # Drag-and-drop file upload & preview
-│       │   └── OCRVerificationForm.tsx  # Editable review form highlighting uncertain fields
-│       │
-│       ├── expenses/                    # Expense Ledger & History
-│       │   ├── ExpenseTable.tsx         # Searchable, filterable list with recurring badges
-│       │   ├── AddExpenseModal.tsx      # Manual quick entry form
-│       │   └── RecurringExpenses.tsx    # Auto-detected recurring subscriptions & bills
-│       │
-│       ├── forecast/                    # Projections & Written Insights
-│       │   ├── ForecastCard.tsx         # Remaining days burn-rate & month-end projection
-│       │   └── WrittenInsights.tsx      # Concrete, dynamic Dhaka-specific written insights
-│       │
-│       ├── pockets/                     # Goal Savings & DPS Engine
-│       │   ├── PocketList.tsx           # Savings pocket cards with interactive sliders
-│       │   ├── PocketCard.tsx           # Target progress, forecast completion date, DPS yield
-│       │   ├── CreatePocketModal.tsx    # Add new savings target
-│       │   └── DPSBreakdownModal.tsx    # Month-by-month compound interest breakdown
-│       │
-│       └── simulator/                   # Interactive Decision Tool
-│           └── WhatIfSimulator.tsx      # Category cut simulator with reactive timeline shifts
+│   └── components/                      # Modular UI Components (Material Theme)
+│       ├── ui/                          # Reusable UI primitives (Button, Card, Input, Modal, Slider, Badge, ProgressBar)
+│       ├── dataset/CaseSelector.tsx     # Instant switcher for 25 competition test cases
+│       ├── dashboard/                   # Primary Metric & Visual Overview (Salary, Breakdown, Largest, Comparison)
+│       ├── ocr/ReceiptUploadModal.tsx   # Drag-and-drop file upload, Gemini OCR & Verification Form
+│       ├── notebook/NotebookInput.tsx   # Fast-typing ledger entry with autocomplete
+│       ├── expenses/ExpenseTable.tsx    # Searchable, filterable list with recurring badges
+│       ├── forecast/                    # Burn-rate card & Dynamic Dhaka written insights
+│       ├── pockets/                     # Savings pockets & DPS compounding modals
+│       └── simulator/WhatIfSimulator.tsx# Category cut simulator with reactive timeline shifts
 ```
 
 ---
 
-## 🚀 Getting Started & Execution
+## Getting Started & Execution
 
 ### Prerequisites
 - Node.js >= 18.x
@@ -183,18 +187,39 @@ npm run dev
 # Navigate to http://localhost:3000
 ```
 
-### Running Test Verification
-To verify the financial calculation engine, DPS formula, forecasting, and recurring detection against all 25 competition cases:
+---
 
-```bash
-npm test
-```
+## Major Design Decisions
+
+1. **DPS Formula Adherence:** Followed Bangladesh Bank compounding standard explicitly, applying monthly interest accumulation.
+2. **Forecast-Driven Savings Timeline:** Bound pocket dates to actual disposable surplus rather than fixed theoretical contributions.
+3. **Multi-Key Gemini OCR Rotation:** Configured Gemini Vision model with key rotation to parse receipt images reliably.
+4. **Dual Entry Modes:** Built structured notebook text parsing with autocomplete for speed and standard modal form for precision.
 
 ---
 
-## ⚖️ Competition Rules & Constraints Compliance Checklist
+## Known Limitations
+
+1. **Receipt OCR Camera Capture Quality:** Low resolution or heavily crumpled receipts may require manual verification in the editable review form.
+2. **Local Multi-Device Sync:** Currently persists to browser local storage; cloud multi-device sync is prepared for future backend integration.
+
+---
+
+## AI Tools Disclosure
+
+As disclosed in `evaluation-manifest.json` and `LICENSES.md`:
+- **Gemini 3.7 Flash:** Code generation, UI component structuring, reactive state flow design, and refactoring. Verified via code review, interactive UI validation in browser, and test case execution.
+- **Gemini 3.6 Flash / 3.5 Flash:** Boilerplate scaffolding, data validation helpers, and mock receipt generation. Verified via linting checks, dataset schema verification, and browser testing.
+- **Gemini 3.1 Pro:** Mathematical formula derivation, OCR integration, and algorithmic calculation logic. Verified via test fixtures and manual calculations.
+- **Claude Sonnet 4.6:** Architecture planning, design system tokens, documentation generation, and bug fixing. Verified via TypeScript build validation and runtime testing.
+
+---
+
+## Competition Rules & Constraints Compliance Checklist
 
 - [x] **Event Record:** `EVENT.md` created with Team ID `LSH26-T061`, Problem ID `P12`, Start Code `LSH26-8490-C900`.
+- [x] **Evaluation Manifest:** `evaluation-manifest.json` completed with all metadata, member contributions, requirements evidence, and disclosures.
+- [x] **Licenses:** `LICENSES.md` listing all dependencies and AI disclosure.
 - [x] **Frictionless Expense Entry & OCR:** Upload receipts/bills, detect amount/date/shop, clear uncertainty flagging, full pre-save editability.
 - [x] **Monthly Dashboard:** Salary comparison, category breakdown, largest expenses, MoM change.
 - [x] **Dynamic Forecast & Written Insights:** Expected rest-of-month spending, month-end surplus/deficit, 3+ non-generic concrete insights with exact numbers and categories.
