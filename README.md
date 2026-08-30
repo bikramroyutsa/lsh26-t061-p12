@@ -1,4 +1,4 @@
-# Personal Ledger Manager (Dhaka Edition) 🇧🇩
+# Personal Ledger Manager
 
 > **Team ID:** `LSH26-T061`  
 > **Problem ID:** `P12`  

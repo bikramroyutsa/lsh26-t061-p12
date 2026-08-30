@@ -90,3 +90,9 @@
   - Assemble all modular components into a responsive, clean dashboard layout
 - [x] **Build & QA Verification:**
   - Verified Next.js build (`npm run build`) with zero errors.
+
+
+### Step 9: Extra features
+- [ ] Auto update typing "lun 500" to category "lunch" spent "500"
+- [ ] Camera scan of receipt
+
